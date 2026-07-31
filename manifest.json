@@ -1,0 +1,18 @@
+{
+  "name": "けもケット 購入サポート",
+  "short_name": "けもケット",
+  "description": "けもケット参加サークルの購入サポートアプリ",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#FFF8F0",
+  "theme_color": "#FF7A35",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23FF7A35'/><text x='256' y='370' font-size='300' text-anchor='middle'>🐾</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
