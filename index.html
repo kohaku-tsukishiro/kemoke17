@@ -1292,6 +1292,7 @@ header h1 span {
   left: 50%;
   transform: translate(-50%, -100%);
 }
+#img-zoom-pins .map-pin { pointer-events: none; cursor: default; }
 .map-pin-highlight {
   outline: 2px solid #ff4500;
   outline-offset: 1px;
@@ -3892,7 +3893,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <div id="img-zoom-overlay" onclick="closeZoom()" style="display:none;position:fixed;inset:0;background:#000;z-index:9998;align-items:center;justify-content:center;cursor:zoom-out">
-  <img id="img-zoom-large" style="max-width:100%;max-height:100%;object-fit:contain">
+  <div id="img-zoom-wrap" style="position:relative;width:100%;max-width:100vw;max-height:100vh;aspect-ratio:3/1">
+    <img id="img-zoom-large" style="width:100%;height:100%;display:block;object-fit:contain">
+    <div id="img-zoom-pins" style="position:absolute;inset:0;pointer-events:none"></div>
+  </div>
   <div style="position:absolute;top:12px;right:12px;color:white;font-size:1.5rem;cursor:pointer" onclick="closeZoom()">✕</div>
 </div>
 
@@ -3902,6 +3906,10 @@ function toggleMapZoom(img) {
   const overlay = document.getElementById('img-zoom-overlay');
   const large = document.getElementById('img-zoom-large');
   large.src = img.src;
+  // 行く予定/あとで/済みの塗りつぶし・順番ピンもズーム表示に複製する（操作はできない見るだけの表示）
+  const pinsSrc = document.getElementById('official-map-pins');
+  const pinsDst = document.getElementById('img-zoom-pins');
+  if (pinsSrc && pinsDst) pinsDst.innerHTML = pinsSrc.innerHTML;
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
