@@ -1265,9 +1265,6 @@ header h1 span {
 .map-pin.is-done  { background: rgba(61,187,119,0.55); border: 1px solid rgba(30,130,75,0.85); }
 .map-pin-order {
   position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translate(-50%, -100%);
   background: #FF4500;
   color: white;
   font-size: 9px;
@@ -1282,6 +1279,18 @@ header h1 span {
   padding: 0 2px;
   box-shadow: 0 0 0 1px white;
   pointer-events: none;
+}
+/* 縦積みの列（D〜S等）：真上だと隣のセルと被るので横に出す */
+.map-pin-order.pos-side {
+  top: 50%;
+  left: 100%;
+  transform: translate(2px, -50%);
+}
+/* 横並びの通路帯（A/B/Cの帯部分）：横だと隣のセルと被るので真上に出す */
+.map-pin-order.pos-top {
+  top: -6px;
+  left: 50%;
+  transform: translate(-50%, -100%);
 }
 .map-pin-highlight {
   outline: 2px solid #ff4500;
@@ -3062,6 +3071,16 @@ function renderMapLayout() {
 
 // 公式配置図画像の上に、ステータス付きサークルの位置を色付きピンで表示
 // 行く予定のサークルには、行く順番タブで決めた順番の番号を重ねて表示する
+// D〜Sブロック等の縦積みの列は横に、A/B/Cの通路帯（横並び）は真上に番号を出す
+function isColumnOrientedId(id) {
+  const [block, numStr] = id.split('-');
+  const n = parseInt(numStr);
+  if (block === 'C') return false;             // 通路帯（横並び）
+  if (block === 'A') return n >= 29;            // 29-50は壁際の縦列、1-28は横並びの帯
+  if (block === 'B') return n >= 31;            // 31-52は壁際の縦列、1-30は横並びの帯
+  return true;                                  // D〜S・J〜Mは縦積みの列
+}
+
 function renderMapPins() {
   const el = document.getElementById('official-map-pins');
   if (!el) return;
@@ -3075,8 +3094,9 @@ function renderMapPins() {
     const c = CIRCLES.find(x => x.id === id);
     const label = c ? c.name : id;
     const orderNum = st === 'plan' ? routeOrder[id] : null;
+    const orderCls = 'map-pin-order' + (isColumnOrientedId(id) ? ' pos-side' : ' pos-top');
     html += `<div class="map-pin is-${st}" data-id="${id}" style="left:${pos[0]}%;top:${pos[1]}%"
-      onclick="event.stopPropagation();showCellDetail('${id}')" title="${label}">${orderNum ? `<span class="map-pin-order">${orderNum}</span>` : ''}</div>`;
+      onclick="event.stopPropagation();showCellDetail('${id}')" title="${label}">${orderNum ? `<span class="${orderCls}">${orderNum}</span>` : ''}</div>`;
   });
   el.innerHTML = html;
 }
