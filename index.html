@@ -1856,8 +1856,8 @@ header h1 span {
 <!-- 配置タブ -->
 <div id="tab-map" class="tab-content active" style="padding:8px;max-width:none">
 
-  <!-- 公式配置図画像 -->
-  <div style="background:white;border-radius:12px;padding:8px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow)">
+  <!-- 公式配置図画像（行く順番タブと共有。タブ切替時にDOM移動して使い回す） -->
+  <div id="official-map-card" style="background:white;border-radius:12px;padding:8px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow)">
     <div style="font-size:0.75rem;font-weight:700;color:var(--brown-light);margin-bottom:4px">📋 公式配置図</div>
     <div style="display:flex;gap:6px;margin-bottom:5px">
       <span style="flex:1;text-align:center;font-size:0.65rem;font-weight:800;background:#FFF3CD;color:#7A5200;border:1.5px solid #E8C840;border-radius:6px;padding:2px 0">C・S〜L（入口から遠い側）</span>
@@ -1871,6 +1871,7 @@ header h1 span {
     <div id="official-map-pins" style="position:absolute;inset:0;pointer-events:none"></div>
     </div>
   </div>
+  <div id="map-card-home"></div>
 
   <!-- 凡例 -->
   <div style="background:white;border-radius:12px;padding:10px 12px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
@@ -1925,9 +1926,11 @@ header h1 span {
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <div style="font-weight:900;font-size:0.95rem;color:var(--brown)">🚶 行く順番</div>
     <div style="display:flex;gap:6px">
+      <button class="bulk-btn" id="routeMapToggleBtn" onclick="toggleRouteMap()" style="font-size:0.7rem;padding:3px 10px">🗺 配置図を表示</button>
       <button class="bulk-btn" onclick="autoSortRoute()" style="font-size:0.7rem;padding:3px 10px">🗺 ブロック順で自動整列</button>
     </div>
   </div>
+  <div id="route-map-slot" style="display:none;margin-bottom:10px"></div>
   <p style="font-size:0.78rem;color:var(--brown-light);margin-bottom:10px">☰ を長押し＆ドラッグで順番を入れ替えられます</p>
   <div class="route-list" id="route-list"></div>
 </div>
@@ -2695,8 +2698,32 @@ function switchTab(name) {
   document.querySelectorAll('.tab-btn')[idx].classList.add('active');
   if (name === 'shopping') renderShopping();
   if (name === 'route') renderRoute();
-  if (name === 'map') { renderMapLayout(); }
+  if (name === 'map') {
+    // 行く順番タブに移動していた公式配置図カードを元の位置に戻す
+    const home = document.getElementById('map-card-home');
+    const card = document.getElementById('official-map-card');
+    if (home && card) home.insertAdjacentElement('beforebegin', card);
+    renderMapLayout();
+  }
   updateCounts();
+}
+
+// 行く順番タブ内で公式配置図カードの表示/非表示を切り替える（表示中は共有DOMを移動して使う）
+function toggleRouteMap() {
+  const slot = document.getElementById('route-map-slot');
+  const card = document.getElementById('official-map-card');
+  const btn = document.getElementById('routeMapToggleBtn');
+  if (!slot || !card) return;
+  const showing = slot.style.display !== 'none';
+  if (showing) {
+    slot.style.display = 'none';
+    if (btn) btn.textContent = '🗺 配置図を表示';
+  } else {
+    slot.appendChild(card);
+    slot.style.display = 'block';
+    if (btn) btn.textContent = '🗺 配置図を隠す';
+    renderMapPins();
+  }
 }
 
 // =====================
@@ -3072,9 +3099,11 @@ function setStatus(id, newSt) {
   save();
   updateCounts();
   updateCardStatus(id);
-  // 配置図が表示中なら再描画
+  // 配置図が表示中なら再描画（行く順番タブに配置図を出している場合も含む）
   if (document.getElementById('tab-map').classList.contains('active')) {
     renderMapLayout();
+  } else {
+    renderMapPins();
   }
   // 買い物リストが表示中なら再描画
   if (document.getElementById('tab-shopping').classList.contains('active')) {
