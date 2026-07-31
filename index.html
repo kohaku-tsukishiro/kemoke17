@@ -2707,7 +2707,11 @@ function switchTab(name) {
   const idx = ['map','route','shopping','search','settings'].indexOf(name);
   document.querySelectorAll('.tab-btn')[idx].classList.add('active');
   if (name === 'shopping') renderShopping();
-  if (name === 'route') renderRoute();
+  if (name === 'route') {
+    renderRoute();
+    // 行く順番タブでは配置図をデフォルトで表示する
+    if (routeMapVisible) showRouteMap();
+  }
   if (name === 'map') {
     // 行く順番タブに移動していた公式配置図カードを元の位置に戻す
     const home = document.getElementById('map-card-home');
@@ -2719,20 +2723,29 @@ function switchTab(name) {
 }
 
 // 行く順番タブ内で公式配置図カードの表示/非表示を切り替える（表示中は共有DOMを移動して使う）
-function toggleRouteMap() {
+let routeMapVisible = true;
+function showRouteMap() {
   const slot = document.getElementById('route-map-slot');
   const card = document.getElementById('official-map-card');
   const btn = document.getElementById('routeMapToggleBtn');
   if (!slot || !card) return;
+  slot.appendChild(card);
+  slot.style.display = 'block';
+  if (btn) btn.textContent = '🗺 配置図を隠す';
+  renderMapPins();
+}
+function toggleRouteMap() {
+  const slot = document.getElementById('route-map-slot');
+  if (!slot) return;
   const showing = slot.style.display !== 'none';
   if (showing) {
     slot.style.display = 'none';
+    routeMapVisible = false;
+    const btn = document.getElementById('routeMapToggleBtn');
     if (btn) btn.textContent = '🗺 配置図を表示';
   } else {
-    slot.appendChild(card);
-    slot.style.display = 'block';
-    if (btn) btn.textContent = '🗺 配置図を隠す';
-    renderMapPins();
+    routeMapVisible = true;
+    showRouteMap();
   }
 }
 
