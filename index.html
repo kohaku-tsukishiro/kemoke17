@@ -1238,20 +1238,18 @@ header h1 span {
 
 .map-pin {
   position: absolute;
-  width: 1.6%;
-  aspect-ratio: 1;
-  min-width: 7px;
-  max-width: 16px;
-  border-radius: 50%;
+  width: 0.78%;
+  height: 2.1%;
+  min-width: 5px;
+  min-height: 8px;
+  border-radius: 2px;
   transform: translate(-50%, -50%);
-  border: 1.5px solid white;
-  box-shadow: 0 0 3px rgba(0,0,0,0.5);
   pointer-events: auto;
   cursor: pointer;
 }
-.map-pin.is-plan  { background: #FFD93D; }
-.map-pin.is-later { background: #4a90d9; }
-.map-pin.is-done  { background: #3dbb77; }
+.map-pin.is-plan  { background: rgba(255,193,7,0.55); border: 1px solid rgba(180,130,0,0.85); }
+.map-pin.is-later { background: rgba(74,144,217,0.55); border: 1px solid rgba(30,90,160,0.85); }
+.map-pin.is-done  { background: rgba(61,187,119,0.55); border: 1px solid rgba(30,130,75,0.85); }
 .map-pin-highlight {
   outline: 2px solid #ff4500;
   outline-offset: 1px;
