@@ -862,8 +862,7 @@ header h1 span {
 .status-badge.none  { background: #f0ebe6; color: #8B6355; border: 1.5px solid #d4c4b8; }
 
 .shop-item.is-done { }
-.shop-item.is-done .shop-item-inner > *:not(.spent-input-row) { opacity: 0.45; }
-.shop-item.is-done .spent-input-row { opacity: 1; }
+.shop-item.is-done .shop-item-inner > * { opacity: 0.45; }
 .shop-item.is-done .shop-memo { text-decoration: line-through; }
 .shop-item.is-done .shop-item-header .name { text-decoration: line-through; color: var(--brown-light); }
 
@@ -1027,19 +1026,29 @@ header h1 span {
   flex-wrap: wrap;
   padding: 0 0 4px 22px;
 }
-.cl-for-toggle { display: flex; gap: 3px; }
-.cl-for-btn {
-  border: none;
+.cl-qty-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--warm);
   border-radius: 6px;
-  padding: 3px 6px;
-  font-size: 0.68rem;
-  font-weight: 700;
+  padding: 2px 4px;
+}
+.cl-qty-label { font-size: 0.66rem; font-weight: 700; color: var(--brown-light); }
+.cl-qty-btn {
+  border: none;
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  font-size: 0.78rem;
+  font-weight: 900;
   cursor: pointer;
   font-family: inherit;
-  background: var(--warm);
-  color: var(--brown-light);
+  background: var(--orange);
+  color: white;
 }
-.cl-for-btn.active { background: var(--orange); color: white; }
+.cl-qty-num { font-size: 0.75rem; font-weight: 800; color: var(--brown); min-width: 12px; text-align: center; }
 .cl-price-input {
   display: flex;
   align-items: center;
@@ -1246,10 +1255,34 @@ header h1 span {
   transform: translate(-50%, -50%);
   pointer-events: auto;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
 }
 .map-pin.is-plan  { background: rgba(255,193,7,0.55); border: 1px solid rgba(180,130,0,0.85); }
 .map-pin.is-later { background: rgba(74,144,217,0.55); border: 1px solid rgba(30,90,160,0.85); }
 .map-pin.is-done  { background: rgba(61,187,119,0.55); border: 1px solid rgba(30,130,75,0.85); }
+.map-pin-order {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background: #FF4500;
+  color: white;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+  border-radius: 50%;
+  min-width: 13px;
+  height: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  box-shadow: 0 0 0 1px white;
+  pointer-events: none;
+}
 .map-pin-highlight {
   outline: 2px solid #ff4500;
   outline-offset: 1px;
@@ -1349,26 +1382,6 @@ header h1 span {
   min-height: 40px;
   min-width: 16px;
   flex-shrink: 0;
-}
-
-/* 入口・本部 */
-.venue-entrance {
-  background: #e8ddd0;
-  border-radius: 6px;
-  padding: 4px 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  gap: 3px;
-  flex-shrink: 0;
-}
-.venue-entrance-label {
-  font-size: 0.58rem;
-  font-weight: 700;
-  color: #5C3D2E;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
 }
 
 /* 配置グリッド */
@@ -1678,43 +1691,6 @@ header h1 span {
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-}
-
-/* 金額入力（買い物リスト内） */
-.spent-input-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-  background: #FFF8E8;
-  border: 2px solid #FFD93D;
-  border-radius: 10px;
-  padding: 8px 10px;
-}
-.spent-input-row .spent-label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--brown);
-  white-space: nowrap;
-}
-.spent-input-row input {
-  width: 90px;
-  border: 1.5px solid #FFD93D;
-  border-radius: 6px;
-  padding: 5px 8px;
-  font-family: inherit;
-  font-size: 0.88rem;
-  font-weight: 700;
-  text-align: right;
-  outline: none;
-  background: white;
-  color: var(--brown);
-}
-.spent-input-row input:focus { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,122,53,0.2); }
-.spent-input-row .spent-yen {
-  font-size: 0.85rem;
-  color: var(--brown);
-  font-weight: 700;
 }
 
 /* ドラッグ並び替え */
@@ -2817,7 +2793,6 @@ function circleCardHTML(c) {
         ${clHTML}
 
       </div>` : ''}
-      ${isDone ? spentInputHTML(id) : ''}
       <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
         <button class="shop-jump-btn" onclick="toggleMemo('${id}')" style="background:${(hasMemo||hasCL)?'var(--green)':'var(--brown)'}">${isOpen ? '📝 閉じる' : '📝 メモ・欲しいもの'}</button>
         <button class="shop-jump-btn" onclick="jumpToMapCell('${id}')">🗺 配置図で見る</button>
@@ -2888,6 +2863,8 @@ function renderMapLayout() {
   const area = document.getElementById('venue-inner');
   if (!area) return;
   const bmap = buildBlockMap();
+  const routeOrder = {};
+  getOrderedPlanCircles().forEach((id, i) => { routeOrder[id] = i + 1; });
 
   // セルHTML（extraはstrip表示用の追加クラス）
   function makeCell(circle, extra) {
@@ -2897,7 +2874,7 @@ function renderMapLayout() {
     const num = parseInt(id.split('-')[1]);
     const st = status[id];
     const cls = st==='done'?'is-done':st==='later'?'is-later':st==='plan'?'is-plan':'';
-    const icon= st==='done'?'✅':st==='later'?'🔁':st==='plan'?'🎯':'';
+    const icon= st==='done'?'✅':st==='later'?'🔁':st==='plan'?(routeOrder[id]?'#'+routeOrder[id]:'🎯'):'';
     const txt = mapNameMode==='rep'?(circle.rep||circle.name):circle.name;
     const short = txt.length>7?txt.slice(0,6)+'…':txt;
     return '<div class="vcell'+extraCls+' '+cls+'" data-id="'+id+'" onclick="showCellDetail(\''+id+'\')">'
@@ -3031,16 +3008,16 @@ function renderMapLayout() {
   html += stripHTML('A', 15, 28, '15-28');
 
   // ===== K〜D・A端列 =====
-  html += '<div class="venue-area-label" style="margin-top:10px">K〜D（入口側）→</div>';
+  // 出口・本部窓口・入口は展示室C/Dの境目（I〜Hの上部）にある案内表示で、
+  // ブースの列そのものを分断しているわけではないため、列の上に案内として出す
+  html += '<div class="venue-area-label" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">'
+    +'<span>K〜D（入口側）→</span>'
+    +'<span style="font-size:0.68rem;font-weight:700;color:var(--brown)">🚪出口 ／ 🏢本部窓口 ／ 🚪入口（I〜Hの上部）</span>'
+    +'</div>';
   html += '<div class="venue-area-row">';
   html += blockWide('K');
   html += blockWide('J');
   html += blockStd('I');
-  html += '<div class="venue-entrance" style="min-height:260px">'
-    +'<div class="venue-entrance-label">出口</div>'
-    +'<div class="venue-entrance-label">本部窓口</div>'
-    +'<div class="venue-entrance-label">入口</div>'
-    +'</div>';
   html += blockStd('H');
   html += blockStd('G');
   html += blockStd('F');
@@ -3057,9 +3034,12 @@ function renderMapLayout() {
 }
 
 // 公式配置図画像の上に、ステータス付きサークルの位置を色付きピンで表示
+// 行く予定のサークルには、行く順番タブで決めた順番の番号を重ねて表示する
 function renderMapPins() {
   const el = document.getElementById('official-map-pins');
   if (!el) return;
+  const routeOrder = {};
+  getOrderedPlanCircles().forEach((id, i) => { routeOrder[id] = i + 1; });
   let html = '';
   Object.keys(status).forEach(id => {
     const st = status[id];
@@ -3067,8 +3047,9 @@ function renderMapPins() {
     if (!st || !pos) return;
     const c = CIRCLES.find(x => x.id === id);
     const label = c ? c.name : id;
+    const orderNum = st === 'plan' ? routeOrder[id] : null;
     html += `<div class="map-pin is-${st}" data-id="${id}" style="left:${pos[0]}%;top:${pos[1]}%"
-      onclick="event.stopPropagation();showCellDetail('${id}')" title="${label}"></div>`;
+      onclick="event.stopPropagation();showCellDetail('${id}')" title="${label}">${orderNum ? `<span class="map-pin-order">${orderNum}</span>` : ''}</div>`;
   });
   el.innerHTML = html;
 }
@@ -3214,7 +3195,7 @@ function addChecklistItem(id) {
   const text = input.value.trim();
   if (!text) return;
   if (!checklists[id]) checklists[id] = [];
-  checklists[id].push({ text, done: false, price: 0, forWhom: 'self' });
+  checklists[id].push({ text, done: false, price: 0, selfQty: 1, errandQty: 0 });
   saveChecklists();
   renderPurchaseTotals();
   // メモは開いたまま再描画
@@ -3273,9 +3254,11 @@ function setChecklistItemPrice(id, idx, val) {
   refreshCircleUI(id);
 }
 
-function setChecklistItemFor(id, idx, forWhom) {
+function adjustChecklistQty(id, idx, field, delta) {
   if (!checklists[id] || !checklists[id][idx]) return;
-  checklists[id][idx].forWhom = forWhom;
+  const item = checklists[id][idx];
+  const key = field === 'self' ? 'selfQty' : 'errandQty';
+  item[key] = Math.max(0, (item[key] || 0) + delta);
   saveChecklists();
   renderPurchaseTotals();
   refreshCircleUI(id);
@@ -3303,9 +3286,8 @@ function getCircleTotals(id) {
   items.forEach(item => {
     const price = item.price || 0;
     if (!price) return;
-    const fw = item.forWhom || 'self';
-    if (fw === 'self' || fw === 'both') self += price;
-    if (fw === 'errand' || fw === 'both') errand += price;
+    self += price * (item.selfQty || 0);
+    errand += price * (item.errandQty || 0);
   });
   return { self, errand };
 }
@@ -3341,9 +3323,13 @@ function checklistHTML(id, editable) {
   html += '<div style="font-size:0.72rem;font-weight:700;color:var(--brown);margin-bottom:2px">📋 欲しいものリスト</div>';
   items.forEach((item, idx) => {
     const price = item.price || 0;
-    const forWhom = item.forWhom || 'self';
+    const selfQty = item.selfQty || 0;
+    const errandQty = item.errandQty || 0;
     if (!editable) {
-      const badge = forWhom === 'errand' ? ' 📦' : forWhom === 'both' ? ' 🙋📦' : '';
+      const bits = [];
+      if (selfQty) bits.push(`🙋×${selfQty}`);
+      if (errandQty) bits.push(`📦×${errandQty}`);
+      const badge = bits.length ? ' ' + bits.join(' ') : '';
       html += `<label class="${item.done ? 'checked' : ''}">
         <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
         <span style="flex:1">${item.text}${price ? ` <b>¥${price.toLocaleString()}</b>` : ''}${badge}</span>
@@ -3357,12 +3343,19 @@ function checklistHTML(id, editable) {
         <span class="cl-remove" onclick="removeChecklistItem('${id}',${idx})">✕</span>
       </div>
       <div class="cl-item-sub">
-        <span class="cl-for-toggle">
-          <button type="button" class="cl-for-btn${forWhom==='self'?' active':''}" onclick="setChecklistItemFor('${id}',${idx},'self')">🙋自分</button>
-          <button type="button" class="cl-for-btn${forWhom==='errand'?' active':''}" onclick="setChecklistItemFor('${id}',${idx},'errand')">📦お使い</button>
-          <button type="button" class="cl-for-btn${forWhom==='both'?' active':''}" onclick="setChecklistItemFor('${id}',${idx},'both')">🙋📦両方</button>
+        <span class="cl-qty-group">
+          <span class="cl-qty-label">🙋自分</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustChecklistQty('${id}',${idx},'self',-1)">−</button>
+          <span class="cl-qty-num">${selfQty}</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustChecklistQty('${id}',${idx},'self',1)">＋</button>
         </span>
-        <span class="cl-price-input">¥<input type="number" value="${price||''}" placeholder="0" min="0" step="10" onchange="setChecklistItemPrice('${id}',${idx},this.value)"></span>
+        <span class="cl-qty-group">
+          <span class="cl-qty-label">📦お使い</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustChecklistQty('${id}',${idx},'errand',-1)">−</button>
+          <span class="cl-qty-num">${errandQty}</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustChecklistQty('${id}',${idx},'errand',1)">＋</button>
+        </span>
+        <span class="cl-price-input">単価¥<input type="number" value="${price||''}" placeholder="0" min="0" step="10" onchange="setChecklistItemPrice('${id}',${idx},this.value)"></span>
       </div>
     </div>`;
   });
@@ -3492,11 +3485,9 @@ function renderShopping() {
 // 予算管理
 // =====================
 let budget = parseInt(localStorage.getItem('kk_budget') || '0');
-let spent = JSON.parse(localStorage.getItem('kk_spent') || '{}');
 
 function saveBudget() {
   localStorage.setItem('kk_budget', budget);
-  localStorage.setItem('kk_spent', JSON.stringify(spent));
 }
 
 function setBudget() {
@@ -3509,34 +3500,17 @@ function setBudget() {
   showToast('予算を設定しました');
 }
 
-function setSpent(id) {
-  const input = document.getElementById(`spent-${id}`);
-  if (!input) return;
-  const val = parseInt(input.value) || 0;
-  if (val > 0) {
-    spent[id] = val;
-  } else {
-    delete spent[id];
-  }
-  saveBudget();
-  renderBudgetBar();
-}
-
-function getTotalSpent() {
-  return Object.values(spent).reduce((a, b) => a + b, 0);
-}
-
 function renderBudgetBar() {
   const el = document.getElementById('budget-bar');
   if (!el) return;
-  const total = getTotalSpent();
+  const total = getPurchaseTotals().self;
   const pct = budget > 0 ? Math.min(100, Math.round(total / budget * 100)) : 0;
   const over = budget > 0 && total > budget;
   const remain = budget > 0 ? budget - total : 0;
 
   el.innerHTML = `
     <div class="budget-header">
-      <h3>💰 予算管理</h3>
+      <h3>💰 予算管理（自分用）</h3>
       <span style="font-size:0.75rem;color:var(--brown-light);cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">⚙ 設定</span>
       <div class="budget-set-row" style="display:none">
         <input type="number" id="budget-input" placeholder="予算額" value="${budget||''}" min="0" step="100">
@@ -3554,15 +3528,6 @@ function renderBudgetBar() {
       </div>
     ` : `<div style="font-size:0.78rem;color:var(--brown-light)">⚙ 設定から予算額を入力してください</div>`}
   `;
-}
-
-function spentInputHTML(id) {
-  const val = spent[id] || '';
-  return `<div class="spent-input-row">
-    <span class="spent-label">💰 いくら使った？</span>
-    <input type="number" id="spent-${id}" value="${val}" placeholder="0" min="0" step="100" onchange="setSpent('${id}')">
-    <span class="spent-yen">円</span>
-  </div>`;
 }
 
 // =====================
