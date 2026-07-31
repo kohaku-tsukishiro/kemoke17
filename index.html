@@ -2895,8 +2895,8 @@ function renderMapLayout() {
       +'</div>';
   }
 
-  // 1列分を「柱・区切り線」入りで描画（sizesの合計が列内の総数）
-  // 例: [2,6,4,4] → 2個 / 柱 / 6個 / 区切り線 / 4個 / 柱 / 4個
+  // 1列分を「柱」入りで描画（sizesの合計が列内の総数、柱はgroup0とgroup2の直後）
+  // 例: [4,6,4,2] → 4個 / 柱 / 6個 / 4個 / 柱 / 2個
   function colWithPillars(data, nums, sizes, extra) {
     let html = '';
     let idx = 0;
@@ -2904,21 +2904,20 @@ function renderMapLayout() {
       html += makeCol(data, nums.slice(idx, idx+sz), extra);
       idx += sz;
       if (gi === 0) html += pillarCell();
-      if (gi === 1) html += '<div class="venue-sep"><div class="venue-sep-line"></div></div>';
       if (gi === 2) html += pillarCell();
     });
     return html;
   }
 
   // 通常ブロック（32小間・D,E,F,G,H,I,N,O,P,Q,R,S）
-  // 左列: 32→17（[2,6,4,4]）  右列: 1→16（[2,6,4,4]）
+  // 左列: 32→17（[4,6,4,2]）  右列: 1→16（[4,6,4,2]）
   function blockStd(block) {
     const color = BLOCK_COLORS[block]||'#888';
     const data  = bmap[block]||{};
     const badge = blockBadge(block);
     const leftNums  = Array.from({length:16},(_,i)=>32-i);
     const rightNums = Array.from({length:16},(_,i)=>1+i);
-    const sizes = [2,6,4,4];
+    const sizes = [4,6,4,2];
     return '<div class="venue-block">'
       +'<div class="venue-block-header" style="background:'+color+'">'+block+(badge?' '+badge:'')+'</div>'
       +'<div class="venue-block-body">'
