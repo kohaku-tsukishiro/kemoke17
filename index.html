@@ -3342,6 +3342,7 @@ function addChecklistItem(id) {
     });
   }
   if (document.getElementById('tab-shopping').classList.contains('active')) renderShopping();
+  if (document.getElementById('tab-route').classList.contains('active')) renderRoute();
   const panel = document.getElementById('map-detail-panel');
   if (panel && panel.style.display === 'block') showCellDetail(id);
 }
@@ -3359,6 +3360,7 @@ function toggleChecklistItem(id, idx) {
     });
   }
   if (document.getElementById('tab-shopping').classList.contains('active')) renderShopping();
+  if (document.getElementById('tab-route').classList.contains('active')) renderRoute();
   // パネル更新
   const panel = document.getElementById('map-detail-panel');
   if (panel && panel.style.display === 'block') showCellDetail(id);
@@ -3377,6 +3379,7 @@ function removeChecklistItem(id, idx) {
     });
   }
   if (document.getElementById('tab-shopping').classList.contains('active')) renderShopping();
+  if (document.getElementById('tab-route').classList.contains('active')) renderRoute();
   const panel = document.getElementById('map-detail-panel');
   if (panel && panel.style.display === 'block') showCellDetail(id);
 }
@@ -3411,6 +3414,8 @@ function refreshCircleUI(id) {
   }
   const shoppingTab = document.getElementById('tab-shopping');
   if (shoppingTab && shoppingTab.classList.contains('active')) renderShopping();
+  const routeTab = document.getElementById('tab-route');
+  if (routeTab && routeTab.classList.contains('active')) renderRoute();
   const panel = document.getElementById('map-detail-panel');
   if (panel && panel.style.display === 'block') showCellDetail(id);
 }
@@ -3496,7 +3501,7 @@ function checklistHTML(id, editable) {
   });
   if (editable) {
     html += `<div class="add-checklist-row">
-      <input type="text" id="cl-input-${id}" placeholder="追加..." onkeydown="if(event.key==='Enter')addChecklistItem('${id}')">
+      <input type="text" id="cl-input-${id}" placeholder="追加..." enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();addChecklistItem('${id}');}">
       <button onclick="addChecklistItem('${id}')">+</button>
     </div>`;
   }
