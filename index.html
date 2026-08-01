@@ -127,7 +127,7 @@ header {
 }
 
 header h1 {
-  font-size: 2.15rem;
+  font-size: 2.55rem;
   font-weight: 900;
   color: white;
   text-shadow: 1px 2px 10px rgba(59,49,99,0.65);
@@ -1255,7 +1255,7 @@ header h1 span {
   line-height: 1;
 }
 .vcell-highlight {
-  outline: 1.5px solid #ff4500 !important;
+  outline: 1px solid #ff4500 !important;
   outline-offset: -1px;
   animation: vcellPulse 0.6s ease-in-out 4;
   z-index: 10;
@@ -1910,10 +1910,6 @@ header h1 span {
     <h1><span class="icon ic-logo"></span><span class="logo-text"><span class="logo-word">けもケット17</span><span>購入サポートアプリ</span></span></h1>
     <div class="header-stats">
       <a class="stat-badge" href="https://skypalette.jp/kemoket/index.html" target="_blank" rel="noopener" title="けもケット公式サイト" style="text-decoration:none;display:inline-flex;align-items:center"><span class="icon ic-web"></span>公式</a>
-      <span id="count-badges" style="display:flex;gap:12px">
-        <span class="stat-badge" onclick="switchTab('shopping')"><span class="icon ic-plan"></span> 0</span>
-        <span class="stat-badge" onclick="switchTab('shopping')"><span class="icon ic-done"></span> 0</span>
-      </span>
     </div>
   </div>
 </header>
@@ -2019,6 +2015,13 @@ header h1 span {
   <div id="route-map-slot" style="display:none;margin-bottom:10px"></div>
   <p style="font-size:0.78rem;color:var(--brown-light);margin-bottom:10px">☰ を長押し＆ドラッグで順番を入れ替えられます</p>
   <div class="route-list" id="route-list"></div>
+
+  <div style="margin-top:18px">
+    <button class="bulk-btn" id="routeDoneToggleBtn" onclick="toggleRouteDone()" style="font-size:0.7rem;padding:3px 10px"><span class="icon ic-done"></span> 済みリストを表示</button>
+  </div>
+  <div id="route-done-section" style="display:none;margin-top:10px">
+    <div class="route-list" id="route-done-list"></div>
+  </div>
 </div>
 
 <!-- 設定タブ -->
@@ -3233,13 +3236,6 @@ function toggleCheck(id) { setStatus(id, 'done'); }
 // 件数更新
 // =====================
 function updateCounts() {
-  const planCount = Object.values(status).filter(v => v === 'plan').length;
-  const doneCount = Object.values(status).filter(v => v === 'done').length;
-  const el = document.getElementById('count-badges');
-  if (el) {
-    el.innerHTML = `<span class="stat-badge" onclick="switchTab('shopping')"><span class="icon ic-plan"></span> ${planCount}</span>`
-      + `<span class="stat-badge" onclick="switchTab('shopping')"><span class="icon ic-done"></span> ${doneCount}</span>`;
-  }
 }
 
 // =====================
@@ -3796,6 +3792,57 @@ function toggleRouteExpand(id) {
   renderRoute();
 }
 
+let routeDoneVisible = false;
+function toggleRouteDone() {
+  routeDoneVisible = !routeDoneVisible;
+  const sec = document.getElementById('route-done-section');
+  const btn = document.getElementById('routeDoneToggleBtn');
+  if (sec) sec.style.display = routeDoneVisible ? 'block' : 'none';
+  if (btn) btn.innerHTML = `<span class="icon ic-done"></span> ${routeDoneVisible ? '済みリストを隠す' : '済みリストを表示'}`;
+  if (routeDoneVisible) renderRouteDone();
+}
+
+function renderRouteDone() {
+  const el = document.getElementById('route-done-list');
+  if (!el) return;
+  const doneIds = CIRCLES.filter(c => status[c.id] === 'done').map(c => c.id);
+
+  if (doneIds.length === 0) {
+    el.innerHTML = '<div class="route-empty" style="padding:20px">まだ済みのサークルはありません</div>';
+    return;
+  }
+
+  el.innerHTML = doneIds.map(id => {
+    const c = CIRCLES.find(x => x.id === id);
+    if (!c) return '';
+    const memo = memos[id] || '';
+    const cl = checklists[id] || [];
+    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>x.done).length}/${cl.length}` : '';
+    const isExpanded = openRouteItems[id];
+
+    return `<div class="route-item" data-id="${id}">
+      <div class="route-item-inner">
+        <div class="route-num" style="background:var(--green)"><span class="icon ic-done" style="width:1.1em;height:1.1em"></span></div>
+        <div class="route-info" onclick="toggleRouteExpand('${id}')" style="cursor:pointer">
+          <div class="name">${c.name}</div>
+          <div class="detail">${id} ／ ${c.rep} ${clSummary}</div>
+          ${(!isExpanded && memo) ? `<div class="route-memo"><span class="icon ic-memo"></span> ${memo}</div>` : ''}
+        </div>
+        <div class="route-actions">
+          <button class="route-act-btn undo" onclick="event.stopPropagation();togglePlan('${id}')" title="行く予定に戻す"><span class="icon ic-plan"></span>戻す</button>
+        </div>
+      </div>
+      ${isExpanded ? `<div style="padding:0 12px 10px 12px">
+        <div class="memo-panel open" id="route-done-memo-${id}" style="display:block">
+          <textarea placeholder="頒布物・メモを入力..." oninput="saveMemo('${id}', this.value)" style="width:100%;border:2px solid var(--warm);border-radius:10px;padding:8px;font-family:inherit;font-size:0.85rem;min-height:60px;outline:none;resize:none">${memo}</textarea>
+          ${checklistHTML(id, true)}
+        </div>
+        <button class="shop-jump-btn" onclick="jumpToMapCell('${id}')" style="margin-top:6px"><span class="icon ic-map"></span> 配置図で見る</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
 function getOrderedPlanCircles() {
   // 行く予定のサークルID一覧
   const planIds = CIRCLES.filter(c => status[c.id] === 'plan').map(c => c.id);
@@ -3809,6 +3856,7 @@ function getOrderedPlanCircles() {
 function renderRoute() {
   const el = document.getElementById('route-list');
   if (!el) return;
+  renderRouteDone();
 
   const orderedIds = getOrderedPlanCircles();
   // orderを最新に同期
