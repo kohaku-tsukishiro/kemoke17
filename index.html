@@ -1788,7 +1788,6 @@ header h1 span {
   box-shadow: 0 2px 10px var(--shadow);
   overflow: hidden;
   transition: opacity 0.15s;
-  border-left: 4px solid var(--yellow);
 }
 .route-item.dragging { opacity: 0.4; }
 .route-item.drag-over { border-top: 3px solid var(--orange); }
@@ -1845,34 +1844,33 @@ header h1 span {
   padding: 8px 4px;
 }
 .route-handle:active { cursor: grabbing; opacity: 0.8; }
-.route-done-wrap {
+.route-actions {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2px;
+  gap: 4px;
   flex-shrink: 0;
 }
-.route-done-btn {
-  border: 2px solid var(--line, #e0d4c8);
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 1rem;
+.route-act-btn {
+  border: none;
+  border-radius: 8px;
+  width: 60px;
+  height: 26px;
+  font-size: 0.68rem;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
-  background: var(--warm);
-  color: var(--brown-light);
-}
-.route-done-btn.done { background: var(--green); border-color: var(--green); color: white; }
-.route-done-caption {
-  font-size: 0.55rem;
-  font-weight: 700;
-  color: var(--brown-light);
+  gap: 3px;
+  transition: transform 0.1s;
+  color: white;
   white-space: nowrap;
 }
+.route-act-btn:active { transform: scale(0.93); }
+.route-act-btn .icon { width: 0.95em; height: 0.95em; }
+.route-act-btn.later  { background: #7cb3e8; }
+.route-act-btn.done   { background: var(--green); }
+.route-act-btn.remove { background: var(--brown-light); }
 .route-empty {
   text-align: center;
   padding: 40px 20px;
@@ -3828,11 +3826,10 @@ function renderRoute() {
     const memo = memos[id] || '';
     const cl = checklists[id] || [];
     const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>x.done).length}/${cl.length}` : '';
-    const isDone = status[id] === 'done';
     const isExpanded = openRouteItems[id];
     const hasMemo = memo || cl.length > 0;
 
-    return `<div class="route-item${isDone?' is-done':''}" data-id="${id}" draggable="true"
+    return `<div class="route-item" data-id="${id}" draggable="true"
       ontouchstart="onRouteTouchStart(event)" ontouchmove="onRouteTouchMove(event)" ontouchend="onRouteTouchEnd(event)"
       ondragstart="onRouteDragStart(event)" ondragover="onRouteDragOver(event)" ondragleave="onRouteDragLeave(event)" ondrop="onRouteDrop(event)" ondragend="onRouteDragEnd(event)">
       <div class="route-item-inner">
@@ -3843,9 +3840,10 @@ function renderRoute() {
           <div class="detail">${id} ／ ${c.rep} ${clSummary}</div>
           ${(!isExpanded && memo) ? `<div class="route-memo"><span class="icon ic-memo"></span> ${memo}</div>` : ''}
         </div>
-        <div class="route-done-wrap">
-          <button class="route-done-btn${isDone?' done':''}" onclick="event.stopPropagation();toggleCheck('${id}')" title="${isDone?'タップで未購入に戻す':'タップで購入済みにする'}">${isDone?'<span class="icon ic-done"></span>':''}</button>
-          <span class="route-done-caption">${isDone?'済み':'未購入'}</span>
+        <div class="route-actions">
+          <button class="route-act-btn later" onclick="event.stopPropagation();toggleLater('${id}')" title="あとで行く"><span class="icon ic-later"></span>あとで</button>
+          <button class="route-act-btn done" onclick="event.stopPropagation();toggleCheck('${id}')" title="購入済みにする"><span class="icon ic-done"></span>済み</button>
+          <button class="route-act-btn remove" onclick="event.stopPropagation();togglePlan('${id}')" title="リストから除外">✕ 除外</button>
         </div>
       </div>
       ${isExpanded ? `<div style="padding:0 12px 10px 12px">
