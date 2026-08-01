@@ -3295,8 +3295,32 @@ function showCellDetail(id) {
 }
 
 function closePanel() {
-  document.getElementById('map-detail-panel').style.display = 'none';
+  const panel = document.getElementById('map-detail-panel');
+  panel.style.display = 'none';
+  panel.style.bottom = '0';
+  panel.style.maxHeight = '60vh';
   document.getElementById('map-detail-overlay').style.display = 'none';
+}
+
+// 配置図の詳細パネル：ソフトキーボード表示中もボタンが隠れないよう、
+// キーボード分だけパネルを持ち上げて高さも縮める（+ボタンを探して
+// 手動スクロールしなくて済むように）
+if (window.visualViewport) {
+  const adjustPanelForKeyboard = () => {
+    const panel = document.getElementById('map-detail-panel');
+    if (!panel || panel.style.display !== 'block') return;
+    const vv = window.visualViewport;
+    const keyboardHeight = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    if (keyboardHeight > 60) {
+      panel.style.bottom = keyboardHeight + 'px';
+      panel.style.maxHeight = (vv.height - 20) + 'px';
+    } else {
+      panel.style.bottom = '0';
+      panel.style.maxHeight = '60vh';
+    }
+  };
+  window.visualViewport.addEventListener('resize', adjustPanelForKeyboard);
+  window.visualViewport.addEventListener('scroll', adjustPanelForKeyboard);
 }
 
 function jumpToSearchFromMap(id) {
