@@ -1129,6 +1129,219 @@ header h1 span {
 .purchase-totals-row .pt-self { color: #1B5E8A; }
 .purchase-totals-row .pt-errand { color: #9C5700; }
 .purchase-totals-row .pt-total { color: var(--brown); margin-left: auto; }
+.purchase-totals-byfrom { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+.pt-from-chip {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #FFE0B2;
+  color: #9C5700;
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+.cl-from-chip {
+  display: inline-block;
+  font-size: 0.64rem;
+  font-weight: 700;
+  background: #FFE0B2;
+  color: #9C5700;
+  border-radius: 5px;
+  padding: 0 5px;
+  margin-left: 3px;
+  vertical-align: 1px;
+}
+/* ===== お使い依頼（依頼者モード・取り込み・報告） ===== */
+.errand-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--cream, #FFF6EC);
+  z-index: 500;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.errand-overlay.open { display: block; }
+.errand-overlay-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--orange);
+  color: white;
+  padding: max(12px, env(safe-area-inset-top)) 14px 10px;
+  font-weight: 900;
+  font-size: 0.95rem;
+}
+.errand-overlay-head button {
+  background: rgba(255,255,255,0.25);
+  border: none;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.errand-overlay-body { padding: 12px 12px max(30px, env(safe-area-inset-bottom)); max-width: 560px; margin: 0 auto; }
+.errand-section {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.errand-section h4 { font-size: 0.82rem; font-weight: 900; color: var(--brown); margin-bottom: 6px; }
+.errand-section .hint { font-size: 0.72rem; color: var(--brown-light); line-height: 1.6; }
+.errand-input {
+  width: 100%;
+  border: 1.5px solid var(--warm);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+.errand-input:focus { border-color: var(--orange); }
+.req-search-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--warm);
+  font-size: 0.82rem;
+}
+.req-search-result:last-child { border-bottom: none; }
+.req-search-result .rname { font-weight: 700; color: var(--brown); }
+.req-search-result .rid { font-size: 0.7rem; color: var(--brown-light); }
+.req-search-result button {
+  margin-left: auto;
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.req-cart-circle {
+  border: 1.5px solid var(--warm);
+  border-radius: 10px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+.req-cart-circle .rc-head { font-size: 0.78rem; font-weight: 800; color: var(--brown); margin-bottom: 5px; }
+.req-cart-item { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; flex-wrap: wrap; }
+.req-cart-item input[type="text"] {
+  flex: 1;
+  min-width: 110px;
+  border: 1.5px solid var(--warm);
+  border-radius: 7px;
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+.req-cart-item input[type="text"]:focus { border-color: var(--orange); }
+.req-cart-item .rm {
+  background: var(--warm);
+  border: none;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.errand-primary-btn {
+  width: 100%;
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.errand-sub-btn {
+  background: white;
+  color: var(--brown);
+  border: 1.5px solid var(--brown-light);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.req-link-box {
+  word-break: break-all;
+  font-size: 0.68rem;
+  color: var(--brown-light);
+  background: var(--warm);
+  border-radius: 8px;
+  padding: 8px;
+  margin: 8px 0;
+  max-height: 90px;
+  overflow-y: auto;
+}
+.errand-from-card {
+  background: white;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px var(--shadow);
+  border-left: 4px solid #FFB300;
+}
+.errand-from-card .ef-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  font-size: 0.88rem;
+  color: var(--brown);
+}
+.errand-from-card .ef-stats { margin-left: auto; font-size: 0.72rem; font-weight: 700; color: var(--brown-light); }
+.errand-from-card .ef-btns { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+#req-import-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 600;
+  align-items: flex-end;
+  justify-content: center;
+}
+#req-import-overlay.open { display: flex; }
+#req-import-panel {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 16px 16px max(24px, env(safe-area-inset-bottom));
+  width: 100%;
+  max-width: 560px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+#qr-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 700;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+#qr-overlay.open { display: flex; }
+#qr-overlay canvas { background: white; padding: 12px; border-radius: 12px; }
 .add-checklist-row button {
   background: var(--orange);
   color: white;
@@ -2028,6 +2241,15 @@ header h1 span {
 <!-- 設定タブ -->
 <div id="tab-settings" class="tab-content">
   <div class="api-key-section">
+    <h3><span class="icon ic-errand"></span> お使い依頼</h3>
+    <p style="font-size:0.82rem;color:var(--brown-light);line-height:1.7;margin-bottom:8px">
+      会場に行く人へ「これ買ってきて」を頼めます。<br>
+      欲しい品物を選んで依頼リンクをつくり、LINEなどで送ってください。<br>
+      受け取った人がリンクを開くと、あなたの名前つきでお使いリストに追加されます。
+    </p>
+    <button class="errand-primary-btn" onclick="openErrandRequest()">お使い依頼をつくる</button>
+  </div>
+  <div class="api-key-section">
     <h3>ℹ️ アプリについて</h3>
     <p style="font-size:0.82rem;color:var(--brown-light);line-height:1.7;">
       けもケット参加670サークルの情報をもとに、頒布物購入をサポートするアプリです。<br>
@@ -2035,6 +2257,52 @@ header h1 span {
       • データは 2026/07/31 更新のサークルリストに基づきます
     </p>
   </div>
+</div>
+
+<!-- お使い依頼 作成オーバーレイ（頼む側） -->
+<div class="errand-overlay" id="errand-overlay">
+  <div class="errand-overlay-head">
+    <span><span class="icon ic-errand"></span> お使い依頼をつくる</span>
+    <button onclick="closeErrandRequest()">✕</button>
+  </div>
+  <div class="errand-overlay-body">
+    <div class="errand-section">
+      <h4>あなたの名前</h4>
+      <input type="text" class="errand-input" id="req-name" placeholder="例）もぐもぐ" oninput="setReqName(this.value)">
+      <p class="hint" style="margin-top:5px">品物と一緒に、買ってきてくれる人へ伝わります</p>
+    </div>
+    <div class="errand-section">
+      <h4><span class="icon ic-search"></span> サークルを探して品物を追加</h4>
+      <input type="text" class="errand-input" id="req-search" placeholder="サークル名・代表者名・配置番号で検索..." oninput="renderReqSearch()">
+      <div id="req-search-results"></div>
+    </div>
+    <div class="errand-section">
+      <h4><span class="icon ic-list"></span> 依頼する品物</h4>
+      <div id="req-cart"></div>
+    </div>
+    <button class="errand-primary-btn" onclick="generateRequestLink()">依頼リンクをつくる</button>
+    <div class="errand-section" id="req-link-section" style="display:none;margin-top:10px">
+      <h4>できあがり！このリンクを送ってください</h4>
+      <div class="req-link-box" id="req-link-text"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="errand-sub-btn" onclick="copyRequestLink()">コピー</button>
+        <button class="errand-sub-btn" onclick="shareRequestLink()">共有（LINEなど）</button>
+        <button class="errand-sub-btn" onclick="showRequestQR()">QRコード</button>
+      </div>
+      <p class="hint" style="margin-top:6px">受け取った人がこのリンクを開くと、あなたの名前つきでお使いリストに追加されます</p>
+    </div>
+  </div>
+</div>
+
+<!-- お使い依頼 取り込み確認 -->
+<div id="req-import-overlay" onclick="if(event.target===this)closeReqImport()">
+  <div id="req-import-panel"></div>
+</div>
+
+<!-- QRコード表示 -->
+<div id="qr-overlay" onclick="closeQR()">
+  <canvas id="qr-canvas"></canvas>
+  <div style="color:white;font-size:0.8rem;font-weight:700">タップで閉じる</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -3490,18 +3758,47 @@ function getPurchaseTotals() {
   return { self, errand, total: self + errand };
 }
 
+function escapeHTML(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+// 依頼者名ごとにお使い品を集計する
+// 戻り値: { 依頼者名: { items: [{id, idx, item}], total, boughtCount } }
+function getErrandsByFrom() {
+  const groups = {};
+  Object.keys(checklists).forEach(id => {
+    (checklists[id] || []).forEach((item, idx) => {
+      if (!(item.errandQty > 0)) return;
+      const from = (item.from || '').trim() || '（名前なし）';
+      if (!groups[from]) groups[from] = { items: [], total: 0, boughtCount: 0 };
+      groups[from].items.push({ id, idx, item });
+      groups[from].total += (item.price || 0) * item.errandQty;
+      if (item.done) groups[from].boughtCount++;
+    });
+  });
+  return groups;
+}
+
 function renderPurchaseTotals() {
   const el = document.getElementById('purchase-totals-bar');
   if (!el) return;
   const t = getPurchaseTotals();
   if (t.total === 0) { el.innerHTML = ''; return; }
+  const fromGroups = getErrandsByFrom();
+  const fromNames = Object.keys(fromGroups);
+  let fromHTML = '';
+  if (fromNames.length > 0 && !(fromNames.length === 1 && fromNames[0] === '（名前なし）')) {
+    fromHTML = `<div class="purchase-totals-byfrom">` +
+      fromNames.map(n => `<span class="pt-from-chip">${escapeHTML(n)} ¥${fromGroups[n].total.toLocaleString()}</span>`).join('') +
+      `</div>`;
+  }
   el.innerHTML = `
     <div class="purchase-totals-header"><h3><span class="icon ic-receipt"></span> お使い精算</h3></div>
     <div class="purchase-totals-row">
       <span class="pt-self"><span class="icon ic-self"></span> 自分用 ¥${t.self.toLocaleString()}</span>
       <span class="pt-errand"><span class="icon ic-errand"></span> お使い用 ¥${t.errand.toLocaleString()}</span>
       <span class="pt-total">合計 ¥${t.total.toLocaleString()}</span>
-    </div>`;
+    </div>${fromHTML}`;
 }
 
 function checklistHTML(id, editable) {
@@ -3513,6 +3810,7 @@ function checklistHTML(id, editable) {
     const price = item.price || 0;
     const selfQty = item.selfQty || 0;
     const errandQty = item.errandQty || 0;
+    const fromChip = (item.from && item.from.trim()) ? ` <span class="cl-from-chip"><span class="icon ic-errand"></span>${escapeHTML(item.from)}</span>` : '';
     if (!editable) {
       const bits = [];
       if (selfQty) bits.push(`<span class="icon ic-self"></span>×${selfQty}`);
@@ -3520,14 +3818,14 @@ function checklistHTML(id, editable) {
       const badge = bits.length ? ' ' + bits.join(' ') : '';
       html += `<label class="${item.done ? 'checked' : ''}">
         <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
-        <span style="flex:1">${item.text}${price ? ` <b>¥${price.toLocaleString()}</b>` : ''}${badge}</span>
+        <span style="flex:1">${item.text}${price ? ` <b>¥${price.toLocaleString()}</b>` : ''}${badge}${fromChip}</span>
       </label>`;
       return;
     }
     html += `<div class="cl-item ${item.done ? 'checked' : ''}">
       <div class="cl-item-main">
         <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
-        <span class="cl-text" onclick="toggleChecklistItem('${id}',${idx})">${item.text}</span>
+        <span class="cl-text" onclick="toggleChecklistItem('${id}',${idx})">${item.text}${fromChip}</span>
         <span class="cl-remove" onclick="removeChecklistItem('${id}',${idx})">✕</span>
       </div>
       <div class="cl-item-sub">
@@ -3618,8 +3916,35 @@ function renderShopping() {
   renderPurchaseTotals();
 
   if (list.length === 0) {
+    if (shopFilter === 'errand') {
+      el.innerHTML = errandPasteBoxHTML() + `<div class="empty-state"><div class="emoji"><span class="icon ic-errand"></span></div>
+        <p>お使い品はまだありません</p>
+        <p style="font-size:0.75rem;color:var(--brown-light);margin:8px 0 10px;line-height:1.7">友だちから受け取った依頼リンクを開くか<br>上の欄にリンクを貼り付けると追加されます</p>
+        <button class="errand-sub-btn" onclick="openErrandRequest()">自分が頼む側なら：お使い依頼をつくる</button>
+      </div>`;
+      return;
+    }
     el.innerHTML = '<div class="empty-state"><div class="emoji"><span class="icon ic-list"></span></div><p>このカテゴリにはまだ何もありません</p></div>';
     return;
+  }
+
+  // お使いタブ：依頼者ごとのサマリー＋報告ボタン
+  let errandHeaderHTML = '';
+  if (shopFilter === 'errand') {
+    errandHeaderHTML += errandPasteBoxHTML();
+    const fromGroups = getErrandsByFrom();
+    errandHeaderHTML = Object.keys(fromGroups).map(n => {
+      const g = fromGroups[n];
+      const enc = encodeURIComponent(n).replace(/'/g, '%27');
+      return `<div class="errand-from-card">
+        <div class="ef-head"><span class="icon ic-errand"></span> ${escapeHTML(n)}${n === '（名前なし）' ? '' : 'さん'}の依頼
+          <span class="ef-stats">${g.boughtCount}/${g.items.length} 済み ・ ¥${g.total.toLocaleString()}</span></div>
+        <div class="ef-btns">
+          <button class="errand-sub-btn" onclick="copyErrandReport(decodeURIComponent('${enc}'))">報告をコピー</button>
+          <button class="errand-sub-btn" onclick="shareErrandReport(decodeURIComponent('${enc}'))">共有</button>
+        </div>
+      </div>`;
+    }).join('');
   }
 
   // ブロックごとにグループ化
@@ -3642,7 +3967,7 @@ function renderShopping() {
     groups[block].sort((a, b) => parseInt(a.id.split('-')[1]) - parseInt(b.id.split('-')[1]));
   });
 
-  let html = '';
+  let html = errandHeaderHTML;
   if (blockRoute) {
     html += `<div style="text-align:right;margin-bottom:6px"><button class="bulk-btn" onclick="resetBlockRoute()" style="font-size:0.7rem;padding:3px 10px">↺ ルート順リセット</button></div>`;
   }
@@ -4063,6 +4388,571 @@ function autoSortRoute() {
 }
 
 // =====================
+// お使い依頼（頼む側モード・URL共有・取り込み・報告）
+// =====================
+let myRequest = JSON.parse(localStorage.getItem('kk_myrequest') || '{"name":"","items":[]}');
+function saveMyRequest() { localStorage.setItem('kk_myrequest', JSON.stringify(myRequest)); }
+
+function openErrandRequest() {
+  document.getElementById('errand-overlay').classList.add('open');
+  document.getElementById('req-name').value = myRequest.name || '';
+  document.body.style.overflow = 'hidden';
+  renderReqCart();
+  renderReqSearch();
+}
+function closeErrandRequest() {
+  document.getElementById('errand-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function setReqName(v) { myRequest.name = v; saveMyRequest(); }
+
+function renderReqSearch() {
+  const q = (document.getElementById('req-search').value || '').trim().toLowerCase();
+  const el = document.getElementById('req-search-results');
+  if (!q) { el.innerHTML = '<p class="hint" style="margin-top:6px">例）サークル名 または A-01 のような配置番号</p>'; return; }
+  const hits = CIRCLES.filter(c =>
+    c.name.toLowerCase().includes(q) || c.rep.toLowerCase().includes(q) || c.id.toLowerCase().includes(q)
+  ).slice(0, 15);
+  if (hits.length === 0) { el.innerHTML = '<p class="hint" style="margin-top:6px">見つかりませんでした</p>'; return; }
+  el.innerHTML = hits.map(c => `
+    <div class="req-search-result">
+      <div><div class="rname">${escapeHTML(c.name)}</div><div class="rid">${c.id} ／ ${escapeHTML(c.rep)}</div></div>
+      <button onclick="addReqItem('${c.id}')">＋品を追加</button>
+    </div>`).join('');
+}
+
+function addReqItem(cid) {
+  myRequest.items.push({ cid, text: '', qty: 1, price: 0 });
+  saveMyRequest();
+  renderReqCart();
+  const inp = document.querySelector(`#req-cart input[type="text"][data-i="${myRequest.items.length - 1}"]`);
+  if (inp) inp.focus();
+}
+
+function renderReqCart() {
+  const el = document.getElementById('req-cart');
+  if (myRequest.items.length === 0) {
+    el.innerHTML = '<p class="hint">まだありません。上の検索からサークルを探して「＋品を追加」を押してください</p>';
+    return;
+  }
+  // サークルごとにグループ化（追加順を保つ）
+  const groups = [];
+  const byCid = {};
+  myRequest.items.forEach((item, i) => {
+    if (!byCid[item.cid]) { byCid[item.cid] = { cid: item.cid, rows: [] }; groups.push(byCid[item.cid]); }
+    byCid[item.cid].rows.push({ item, i });
+  });
+  el.innerHTML = groups.map(g => {
+    const c = CIRCLES.find(x => x.id === g.cid);
+    const label = c ? `${g.cid}　${c.name}` : g.cid;
+    return `<div class="req-cart-circle">
+      <div class="rc-head">${escapeHTML(label)}</div>
+      ${g.rows.map(({ item, i }) => `
+        <div class="req-cart-item">
+          <input type="text" data-i="${i}" placeholder="品名（例：新刊）" value="${escapeHTML(item.text)}" oninput="setReqItemText(${i}, this.value)">
+          <span class="cl-qty-group">
+            <button type="button" class="cl-qty-btn" onclick="adjustReqQty(${i},-1)">−</button>
+            <span class="cl-qty-num">${item.qty}</span>
+            <button type="button" class="cl-qty-btn" onclick="adjustReqQty(${i},1)">＋</button>
+          </span>
+          <span class="cl-price-input">単価¥<input type="number" value="${item.price || ''}" placeholder="不明" min="0" step="10" onchange="setReqItemPrice(${i}, this.value)"></span>
+          <button class="rm" onclick="removeReqItem(${i})">✕</button>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+function setReqItemText(i, v) { if (myRequest.items[i]) { myRequest.items[i].text = v; saveMyRequest(); } }
+function setReqItemPrice(i, v) { if (myRequest.items[i]) { myRequest.items[i].price = parseInt(v) || 0; saveMyRequest(); } }
+function adjustReqQty(i, d) {
+  if (!myRequest.items[i]) return;
+  myRequest.items[i].qty = Math.max(1, (myRequest.items[i].qty || 1) + d);
+  saveMyRequest();
+  renderReqCart();
+}
+function removeReqItem(i) {
+  myRequest.items.splice(i, 1);
+  saveMyRequest();
+  renderReqCart();
+}
+
+// --- URLセーフbase64（UTF-8対応） ---
+function b64uEncode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function b64uDecode(s) {
+  s = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  const bin = atob(s);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+let currentReqLink = '';
+function generateRequestLink() {
+  const name = (myRequest.name || '').trim();
+  if (!name) { showToast('あなたの名前を入れてください'); document.getElementById('req-name').focus(); return; }
+  const items = myRequest.items.filter(it => it.text.trim());
+  if (items.length === 0) { showToast('品物を1つ以上追加してください（品名が空のものは送られません）'); return; }
+  const payload = {
+    v: 1,
+    rid: Date.now().toString(36),
+    n: name,
+    items: items.map(it => [it.cid, it.text.trim(), it.qty || 1, it.price || 0])
+  };
+  const base = (location.origin && location.origin !== 'null') ? location.origin + location.pathname : location.href.split('#')[0];
+  currentReqLink = base + '#req=' + b64uEncode(JSON.stringify(payload));
+  document.getElementById('req-link-section').style.display = 'block';
+  document.getElementById('req-link-text').textContent = currentReqLink;
+  document.getElementById('req-link-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyTextToClipboard(text, okMsg) {
+  const done = () => showToast(okMsg || 'コピーしました');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => { legacyCopy(text); done(); });
+  } else { legacyCopy(text); done(); }
+}
+function legacyCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+}
+function copyRequestLink() {
+  if (currentReqLink) copyTextToClipboard(currentReqLink, '依頼リンクをコピーしました');
+}
+function shareRequestLink() {
+  if (!currentReqLink) return;
+  const name = (myRequest.name || '').trim();
+  if (navigator.share) {
+    navigator.share({ text: `【けもケ お使い依頼】${name}より\n${currentReqLink}` }).catch(() => {});
+  } else {
+    copyRequestLink();
+  }
+}
+
+// --- 受け取り側：依頼URLの取り込み ---
+let importedRids = JSON.parse(localStorage.getItem('kk_req_rids') || '[]');
+let pendingReq = null;
+
+function parseReqPayload(b64) {
+  let payload = null;
+  try { payload = JSON.parse(b64uDecode(b64)); } catch (e) {}
+  if (!payload || payload.v !== 1 || !Array.isArray(payload.items) || payload.items.length === 0) return null;
+  return payload;
+}
+
+function checkIncomingRequest() {
+  const m = location.hash.match(/^#req=(.+)$/);
+  if (!m) return;
+  history.replaceState(null, '', location.pathname + location.search);
+  const payload = parseReqPayload(m[1]);
+  if (!payload) { showToast('依頼リンクを読み取れませんでした'); return; }
+  pendingReq = payload;
+  showReqImportPanel();
+}
+
+// ホーム画面アプリ（PWA）はブラウザとデータが別のため、リンクを貼り付けて取り込む手段も用意する
+function importFromPastedLink() {
+  const inp = document.getElementById('req-paste-input');
+  if (!inp) return;
+  const m = (inp.value || '').match(/#req=([A-Za-z0-9_-]+)/);
+  const payload = m && parseReqPayload(m[1]);
+  if (!payload) { showToast('依頼リンクを読み取れませんでした。URL全体を貼り付けてください'); return; }
+  inp.value = '';
+  pendingReq = payload;
+  showReqImportPanel();
+}
+
+function errandPasteBoxHTML() {
+  return `<div class="errand-section" style="margin-bottom:8px">
+    <h4>依頼リンクを受け取ったら</h4>
+    <div style="display:flex;gap:6px">
+      <input type="text" class="errand-input" id="req-paste-input" placeholder="依頼リンクをここに貼り付け..." enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();importFromPastedLink();}">
+      <button class="errand-sub-btn" onclick="importFromPastedLink()" style="flex-shrink:0">取り込む</button>
+    </div>
+  </div>`;
+}
+
+function showReqImportPanel() {
+  const p = pendingReq;
+  if (!p) return;
+  const name = (p.n || '').trim() || '（名前なし）';
+  const already = p.rid && importedRids.includes(p.rid);
+  const unknown = p.items.filter(it => !CIRCLES.find(c => c.id === it[0])).length;
+  let total = 0;
+  const rows = p.items.map(it => {
+    const cid = it[0], text = it[1], qty = it[2] || 1, price = it[3] || 0;
+    const c = CIRCLES.find(x => x.id === cid);
+    total += price * qty;
+    return `<div style="display:flex;gap:6px;padding:5px 0;border-bottom:1px solid var(--warm);font-size:0.82rem">
+      <span style="font-weight:800;color:var(--brown);flex-shrink:0">${escapeHTML(cid)}</span>
+      <span style="flex:1">${c ? escapeHTML(c.name) + '：' : ''}${escapeHTML(text)} ×${qty}</span>
+      <span style="color:var(--brown-light);flex-shrink:0">${price ? '¥' + (price * qty).toLocaleString() : ''}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('req-import-panel').innerHTML = `
+    <div style="font-weight:900;font-size:1rem;color:var(--brown);margin-bottom:8px"><span class="icon ic-errand"></span> ${escapeHTML(name)}さんからのお使い依頼</div>
+    ${already ? '<p style="font-size:0.78rem;color:#C62828;font-weight:700;margin-bottom:6px">⚠ この依頼は一度取り込み済みです。もう一度追加すると重複します。</p>' : ''}
+    ${unknown > 0 ? `<p style="font-size:0.78rem;color:#C62828;font-weight:700;margin-bottom:6px">⚠ ${unknown}件はサークルリストに見つからないため追加できません</p>` : ''}
+    <div style="margin-bottom:10px">${rows}</div>
+    ${total ? `<div style="text-align:right;font-weight:900;color:var(--brown);margin-bottom:10px">概算合計 ¥${total.toLocaleString()}</div>` : ''}
+    <button class="errand-primary-btn" onclick="applyPendingReq()">お使いリストに追加する</button>
+    <button class="errand-sub-btn" style="width:100%;margin-top:8px" onclick="closeReqImport()">やめる</button>`;
+  document.getElementById('req-import-overlay').classList.add('open');
+}
+
+function applyPendingReq() {
+  const p = pendingReq;
+  if (!p) return;
+  const name = (p.n || '').trim() || '（名前なし）';
+  let added = 0, skipped = 0;
+  p.items.forEach(it => {
+    const cid = it[0], text = String(it[1] || ''), qty = it[2] || 1, price = it[3] || 0;
+    if (!CIRCLES.find(c => c.id === cid)) { skipped++; return; }
+    if (!checklists[cid]) checklists[cid] = [];
+    checklists[cid].push({ text, done: false, price, selfQty: 0, errandQty: qty, from: name });
+    if (!status[cid]) status[cid] = 'plan';
+    added++;
+  });
+  if (p.rid && !importedRids.includes(p.rid)) {
+    importedRids.push(p.rid);
+    localStorage.setItem('kk_req_rids', JSON.stringify(importedRids));
+  }
+  saveChecklists();
+  save();
+  updateCounts();
+  renderCircles();
+  closeReqImport();
+  switchTab('shopping');
+  setShopFilter('errand');
+  showToast(`${name}さんの依頼 ${added}件をお使いリストに追加しました${skipped ? `（${skipped}件はスキップ）` : ''}`);
+}
+function closeReqImport() {
+  pendingReq = null;
+  document.getElementById('req-import-overlay').classList.remove('open');
+}
+
+// --- 依頼者への報告テキスト ---
+function makeErrandReport(from) {
+  const g = getErrandsByFrom()[from];
+  if (!g) return '';
+  let total = 0;
+  const lines = g.items.map(({ id, item }) => {
+    const c = CIRCLES.find(x => x.id === id);
+    const cname = c ? c.name : id;
+    const sub = (item.price || 0) * (item.errandQty || 0);
+    if (item.done) {
+      total += sub;
+      return `✅ ${id} ${cname}「${item.text}」×${item.errandQty}${sub ? ` ¥${sub.toLocaleString()}` : ''}`;
+    }
+    return `❌ ${id} ${cname}「${item.text}」（未購入）`;
+  });
+  return `【けもケ お使い報告】${from}さんへ\n` + lines.join('\n') + `\n────\n立て替え合計 ¥${total.toLocaleString()}`;
+}
+function copyErrandReport(from) {
+  const t = makeErrandReport(from);
+  if (t) copyTextToClipboard(t, '報告をコピーしました');
+}
+function shareErrandReport(from) {
+  const t = makeErrandReport(from);
+  if (!t) return;
+  if (navigator.share) navigator.share({ text: t }).catch(() => {});
+  else copyTextToClipboard(t, '報告をコピーしました');
+}
+
+// =====================
+// QRコード生成（外部ライブラリ不使用・バイトモード・誤り訂正レベルL）
+// =====================
+const QR_EC_L={1:[7,[[1,19]]],2:[10,[[1,34]]],3:[15,[[1,55]]],4:[20,[[1,80]]],5:[26,[[1,108]]],6:[18,[[2,68]]],7:[20,[[2,78]]],8:[24,[[2,97]]],9:[30,[[2,116]]],10:[18,[[2,68],[2,69]]],11:[20,[[4,81]]],12:[24,[[2,92],[2,93]]],13:[26,[[4,107]]],14:[30,[[3,115],[1,116]]],15:[22,[[5,87],[1,88]]],16:[24,[[5,98],[1,99]]],17:[28,[[1,107],[5,108]]],18:[30,[[5,120],[1,121]]],19:[28,[[3,113],[4,114]]],20:[28,[[3,107],[5,108]]],21:[28,[[4,116],[4,117]]],22:[28,[[2,111],[7,112]]],23:[30,[[4,121],[5,122]]],24:[30,[[6,117],[4,118]]],25:[26,[[8,106],[4,107]]],26:[28,[[10,114],[2,115]]],27:[30,[[8,122],[4,123]]],28:[30,[[3,117],[10,118]]],29:[30,[[7,116],[7,117]]],30:[30,[[5,115],[10,116]]],31:[30,[[13,115],[3,116]]],32:[30,[[17,115]]],33:[30,[[17,115],[1,116]]],34:[30,[[13,115],[6,116]]],35:[30,[[12,121],[7,122]]],36:[30,[[6,121],[14,122]]],37:[30,[[17,122],[4,123]]],38:[30,[[4,122],[18,123]]],39:[30,[[20,117],[4,118]]],40:[30,[[19,118],[6,119]]]};
+const QR_ALIGN={1:[],2:[6,18],3:[6,22],4:[6,26],5:[6,30],6:[6,34],7:[6,22,38],8:[6,24,42],9:[6,26,46],10:[6,28,50],11:[6,30,54],12:[6,32,58],13:[6,34,62],14:[6,26,46,66],15:[6,26,48,70],16:[6,26,50,74],17:[6,30,54,78],18:[6,30,56,82],19:[6,30,58,86],20:[6,34,62,90],21:[6,28,50,72,94],22:[6,26,50,74,98],23:[6,30,54,78,102],24:[6,28,54,80,106],25:[6,32,58,84,110],26:[6,30,58,86,114],27:[6,34,62,90,118],28:[6,26,50,74,98,122],29:[6,30,54,78,102,126],30:[6,26,52,78,104,130],31:[6,30,56,82,108,134],32:[6,34,60,86,112,138],33:[6,30,58,86,114,142],34:[6,34,62,90,118,146],35:[6,30,54,78,102,126,150],36:[6,24,50,76,102,128,154],37:[6,28,54,80,106,132,158],38:[6,32,58,84,110,136,162],39:[6,26,54,82,110,138,166],40:[6,30,58,86,114,142,170]};
+
+const QR_GF_EXP = new Array(512), QR_GF_LOG = new Array(256);
+(function () {
+  let x = 1;
+  for (let i = 0; i < 255; i++) {
+    QR_GF_EXP[i] = x;
+    QR_GF_LOG[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11D;
+  }
+  for (let i = 255; i < 512; i++) QR_GF_EXP[i] = QR_GF_EXP[i - 255];
+})();
+function qrGfMul(a, b) { return (a && b) ? QR_GF_EXP[QR_GF_LOG[a] + QR_GF_LOG[b]] : 0; }
+
+function qrRsGenPoly(n) {
+  let g = [1];
+  for (let i = 0; i < n; i++) {
+    const ng = new Array(g.length + 1).fill(0);
+    for (let j = 0; j < g.length; j++) {
+      ng[j] ^= g[j];
+      ng[j + 1] ^= qrGfMul(g[j], QR_GF_EXP[i]);
+    }
+    g = ng;
+  }
+  return g;
+}
+
+function qrRsEncode(data, ecLen) {
+  const gen = qrRsGenPoly(ecLen);
+  const res = data.concat(new Array(ecLen).fill(0));
+  for (let i = 0; i < data.length; i++) {
+    const coef = res[i];
+    if (coef === 0) continue;
+    for (let j = 0; j < gen.length; j++) res[i + j] ^= qrGfMul(gen[j], coef);
+  }
+  return res.slice(data.length);
+}
+
+function qrBitLen(x) { let n = 0; while (x) { n++; x >>= 1; } return n; }
+function qrVersionBits(v) {
+  let d = v << 12;
+  while (qrBitLen(d) > 12) d ^= 0x1F25 << (qrBitLen(d) - 13);
+  return (v << 12) | d;
+}
+function qrFormatBits(mask) {
+  const dataVal = (1 << 3) | mask; // 誤り訂正レベルL=01
+  let d = dataVal << 10;
+  while (qrBitLen(d) > 10) d ^= 0x537 << (qrBitLen(d) - 11);
+  return ((dataVal << 10) | d) ^ 0x5412;
+}
+
+const QR_MASK_FN = [
+  (r, c) => (r + c) % 2 === 0,
+  (r, c) => r % 2 === 0,
+  (r, c) => c % 3 === 0,
+  (r, c) => (r + c) % 3 === 0,
+  (r, c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
+  (r, c) => (r * c) % 2 + (r * c) % 3 === 0,
+  (r, c) => ((r * c) % 2 + (r * c) % 3) % 2 === 0,
+  (r, c) => ((r + c) % 2 + (r * c) % 3) % 2 === 0
+];
+
+function qrPenalty(M, size) {
+  let score = 0;
+  // 規則1: 同色の連続
+  for (let r = 0; r < size; r++) {
+    let runR = 1, runC = 1;
+    for (let i = 1; i <= size; i++) {
+      if (i < size && M[r][i] === M[r][i - 1]) runR++;
+      else { if (runR >= 5) score += 3 + runR - 5; runR = 1; }
+      if (i < size && M[i][r] === M[i - 1][r]) runC++;
+      else { if (runC >= 5) score += 3 + runC - 5; runC = 1; }
+    }
+  }
+  // 規則2: 2x2同色ブロック
+  for (let r = 0; r < size - 1; r++) for (let c = 0; c < size - 1; c++) {
+    const v = M[r][c];
+    if (M[r][c + 1] === v && M[r + 1][c] === v && M[r + 1][c + 1] === v) score += 3;
+  }
+  // 規則3: 1:1:3:1:1パターン（前後に明4）
+  const p1 = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0], p2 = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1];
+  for (let r = 0; r < size; r++) for (let c = 0; c <= size - 11; c++) {
+    let m1r = true, m2r = true, m1c = true, m2c = true;
+    for (let k = 0; k < 11; k++) {
+      if (M[r][c + k] !== p1[k]) m1r = false;
+      if (M[r][c + k] !== p2[k]) m2r = false;
+      if (M[c + k][r] !== p1[k]) m1c = false;
+      if (M[c + k][r] !== p2[k]) m2c = false;
+    }
+    if (m1r) score += 40;
+    if (m2r) score += 40;
+    if (m1c) score += 40;
+    if (m2c) score += 40;
+  }
+  // 規則4: 暗モジュール比率
+  let dark = 0;
+  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) dark += M[r][c];
+  score += Math.floor(Math.abs(dark * 100 / (size * size) - 50) / 5) * 10;
+  return score;
+}
+
+// テキストからQRマトリクス（0/1の二次元配列）を作る。大きすぎる場合はnull
+function qrMakeMatrix(text, forceMask) {
+  const data = Array.from(new TextEncoder().encode(text));
+  let version = 0;
+  for (let v = 1; v <= 40; v++) {
+    const dataCw = QR_EC_L[v][1].reduce((s, g) => s + g[0] * g[1], 0);
+    if (4 + (v <= 9 ? 8 : 16) + data.length * 8 <= dataCw * 8) { version = v; break; }
+  }
+  if (!version) return null;
+  const size = 17 + version * 4;
+  const ecPerBlock = QR_EC_L[version][0];
+  const blockGroups = QR_EC_L[version][1];
+  const totalDataCw = blockGroups.reduce((s, g) => s + g[0] * g[1], 0);
+
+  // データビット列 → コード語
+  const bits = [];
+  const push = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+  push(4, 4);
+  push(data.length, version <= 9 ? 8 : 16);
+  data.forEach(b => push(b, 8));
+  push(0, Math.min(4, totalDataCw * 8 - bits.length));
+  while (bits.length % 8) bits.push(0);
+  const padBytes = [0xEC, 0x11];
+  let pi = 0;
+  while (bits.length < totalDataCw * 8) push(padBytes[pi++ % 2], 8);
+  const dataCws = [];
+  for (let i = 0; i < bits.length; i += 8) {
+    let b = 0;
+    for (let j = 0; j < 8; j++) b = (b << 1) | bits[i + j];
+    dataCws.push(b);
+  }
+
+  // ブロック分割＋誤り訂正コード語
+  const blocks = [];
+  let off = 0;
+  blockGroups.forEach(g => {
+    for (let b = 0; b < g[0]; b++) {
+      const d = dataCws.slice(off, off + g[1]);
+      off += g[1];
+      blocks.push({ d, e: qrRsEncode(d, ecPerBlock) });
+    }
+  });
+  // インターリーブ
+  const finalCws = [];
+  const maxD = Math.max(...blocks.map(b => b.d.length));
+  for (let i = 0; i < maxD; i++) blocks.forEach(b => { if (i < b.d.length) finalCws.push(b.d[i]); });
+  for (let i = 0; i < ecPerBlock; i++) blocks.forEach(b => finalCws.push(b.e[i]));
+
+  // マトリクス構築（null=未確定）
+  const M = Array.from({ length: size }, () => new Array(size).fill(null));
+  const isData = Array.from({ length: size }, () => new Array(size).fill(false));
+  const placeFinder = (r0, c0) => {
+    for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++) {
+      const rr = r0 + r, cc = c0 + c;
+      if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
+      const inside = r >= 0 && r <= 6 && c >= 0 && c <= 6;
+      M[rr][cc] = (inside && (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4))) ? 1 : 0;
+    }
+  };
+  placeFinder(0, 0);
+  placeFinder(0, size - 7);
+  placeFinder(size - 7, 0);
+  // 位置合わせパターン
+  const ap = QR_ALIGN[version];
+  ap.forEach(r0 => ap.forEach(c0 => {
+    const nearFinder = (r0 < 9 && c0 < 9) || (r0 < 9 && c0 > size - 10) || (r0 > size - 10 && c0 < 9);
+    if (nearFinder) return;
+    for (let r = -2; r <= 2; r++) for (let c = -2; c <= 2; c++) {
+      M[r0 + r][c0 + c] = (Math.max(Math.abs(r), Math.abs(c)) !== 1) ? 1 : 0;
+    }
+  }));
+  // タイミングパターン
+  for (let i = 8; i < size - 8; i++) {
+    if (M[6][i] === null) M[6][i] = i % 2 === 0 ? 1 : 0;
+    if (M[i][6] === null) M[i][6] = i % 2 === 0 ? 1 : 0;
+  }
+  // フォーマット情報領域を予約
+  for (let i = 0; i < 9; i++) {
+    if (M[8][i] === null) M[8][i] = 0;
+    if (M[i][8] === null) M[i][8] = 0;
+  }
+  for (let i = 0; i < 8; i++) {
+    if (M[8][size - 1 - i] === null) M[8][size - 1 - i] = 0;
+    if (M[size - 1 - i][8] === null) M[size - 1 - i][8] = 0;
+  }
+  M[size - 8][8] = 1; // 固定の暗モジュール
+  // バージョン情報（バージョン7以上）
+  if (version >= 7) {
+    const vi = qrVersionBits(version);
+    for (let i = 0; i < 18; i++) {
+      const bit = (vi >> i) & 1;
+      M[Math.floor(i / 3)][size - 11 + (i % 3)] = bit;
+      M[size - 11 + (i % 3)][Math.floor(i / 3)] = bit;
+    }
+  }
+  // データ配置（右下からジグザグ）
+  let inc = -1, row = size - 1, bitIdx = 7, byteIdx = 0;
+  for (let col = size - 1; col > 0; col -= 2) {
+    if (col === 6) col--;
+    while (true) {
+      for (let c = 0; c < 2; c++) {
+        if (M[row][col - c] === null) {
+          const dark = byteIdx < finalCws.length && ((finalCws[byteIdx] >> bitIdx) & 1) === 1;
+          M[row][col - c] = dark ? 1 : 0;
+          isData[row][col - c] = true;
+          bitIdx--;
+          if (bitIdx === -1) { byteIdx++; bitIdx = 7; }
+        }
+      }
+      row += inc;
+      if (row < 0 || row >= size) { row -= inc; inc = -inc; break; }
+    }
+  }
+
+  // マスク適用＋フォーマット情報書き込み
+  const buildMasked = (mask) => {
+    const out = M.map(r => r.slice());
+    const fn = QR_MASK_FN[mask];
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+      if (isData[r][c] && fn(r, c)) out[r][c] ^= 1;
+    }
+    const fb = qrFormatBits(mask);
+    for (let i = 0; i < 15; i++) {
+      const mod = (fb >> i) & 1;
+      // 縦（左上）
+      if (i < 6) out[i][8] = mod;
+      else if (i < 8) out[i + 1][8] = mod;
+      else out[size - 15 + i][8] = mod;
+      // 横（左上→右上）
+      if (i < 8) out[8][size - 1 - i] = mod;
+      else if (i < 9) out[8][15 - i - 1 + 1] = mod;
+      else out[8][15 - i - 1] = mod;
+    }
+    out[size - 8][8] = 1;
+    return out;
+  };
+  if (forceMask != null) return buildMasked(forceMask);
+  let best = null, bestScore = Infinity;
+  for (let m = 0; m < 8; m++) {
+    const cand = buildMasked(m);
+    const s = qrPenalty(cand, size);
+    if (s < bestScore) { bestScore = s; best = cand; }
+  }
+  return best;
+}
+
+function drawQRToCanvas(canvas, text) {
+  const M = qrMakeMatrix(text);
+  if (!M) return false;
+  const size = M.length;
+  const quiet = 4;
+  const target = Math.min(320, Math.floor(window.innerWidth * 0.82));
+  const scale = Math.max(2, Math.floor(target / (size + quiet * 2)));
+  const px = (size + quiet * 2) * scale;
+  canvas.width = px;
+  canvas.height = px;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, px, px);
+  ctx.fillStyle = '#000';
+  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+    if (M[r][c]) ctx.fillRect((c + quiet) * scale, (r + quiet) * scale, scale, scale);
+  }
+  return true;
+}
+
+function showRequestQR() {
+  if (!currentReqLink) return;
+  const canvas = document.getElementById('qr-canvas');
+  if (!drawQRToCanvas(canvas, currentReqLink)) {
+    showToast('データが大きすぎてQRコードにできません。リンクのコピーを使ってください');
+    return;
+  }
+  document.getElementById('qr-overlay').classList.add('open');
+}
+function closeQR() { document.getElementById('qr-overlay').classList.remove('open'); }
+
+// =====================
 // 初期化
 // =====================
 document.addEventListener('DOMContentLoaded', () => {
@@ -4081,6 +4971,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ピンチズーム初期化
   initPinchZoom();
+
+  // お使い依頼URLの取り込み（起動時＋起動中にリンクを開いた場合）
+  checkIncomingRequest();
+  window.addEventListener('hashchange', checkIncomingRequest);
 });
 
 </script>
