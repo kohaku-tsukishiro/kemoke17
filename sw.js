@@ -2,6 +2,7 @@
 // けもケット PWA Service Worker（自動更新版）
 // index.htmlを更新するだけでOK！
 // このファイルの編集は不要です
+// スコープ: このファイルが置かれたディレクトリ配下のみ
 // =============================================
 
 // インストール即有効化
@@ -20,20 +21,8 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // API呼び出し（AI機能）はネットワークのみ
-  if (event.request.url.includes('api.anthropic.com')) {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return new Response(JSON.stringify({ error: { message: 'オフラインです' } }), {
-          headers: { 'Content-Type': 'application/json' }
-        });
-      })
-    );
-    return;
-  }
-
   // ネットワーク優先 → 成功したらキャッシュ更新 → オフラインならキャッシュ
-  // cache:'no-store' でブラウザのHTTPキャッシュも経由させず、常に最新を取りに行く
+  // cache:'no-store' でブラウザのHTTPキャッシュを経由させず、常に最新を取りに行く
   event.respondWith(
     fetch(event.request, { cache: 'no-store' }).then(response => {
       if (response.ok) {
