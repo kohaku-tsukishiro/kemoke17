@@ -1554,14 +1554,15 @@ header h1 span {
   padding: 0 2px;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.85);
   line-height: 1;
+  /* 下限は地図コンテンツと同スケール（ピンの真横に収めることを優先。スマホはピンチ拡大で読む前提） */
   /* フォールバック(vw)：cqw非対応ブラウザ用 */
-  font-size: clamp(7px, 1.9vw, 11px);
-  min-width: clamp(10px, 2.6vw, 15px);
-  height:    clamp(10px, 2.6vw, 15px);
+  font-size: clamp(4.5px, 1.5vw, 10px);
+  min-width: clamp(6px, 2.1vw, 14px);
+  height:    clamp(6px, 2.1vw, 14px);
   /* コンテナクエリ対応ブラウザは画像幅基準のこちらが勝つ */
-  font-size: clamp(7px, 1.8cqw, 11px);
-  min-width: clamp(10px, 2.5cqw, 15px);
-  height:    clamp(10px, 2.5cqw, 15px);
+  font-size: clamp(4.5px, 1.45cqw, 10px);
+  min-width: clamp(6px, 2.0cqw, 14px);
+  height:    clamp(6px, 2.0cqw, 14px);
 }
 /* 衝突回避でずらしたバッジとピンを結ぶ引き出し線 */
 .map-pin-leaders {
@@ -1575,8 +1576,8 @@ header h1 span {
 }
 .map-pin-leaders line {
   stroke: #FF4500;
-  stroke-width: 1.2;
-  opacity: 0.65;
+  stroke-width: 1.6;
+  opacity: 0.8;
   vector-effect: non-scaling-stroke;
 }
 /* 引き出し線のピン側端点ドット（長さ0の線＋round cap。circleは3:1スケールで楕円に歪むため使わない） */
@@ -3694,18 +3695,21 @@ function layoutMapOrderBadges(pinsEl) {
     const side = b.dataset.side === '1';
     const cands = [];
     if (side) {
-      // 縦列サークル：右隣→同じ列内の上下スロット→左隣→その上下スロット→最後に外側の列。
-      // 横に散らさず縦に積むことで、引き出し線が同一直線上に重ならず角度で区別できる。
+      // 縦列サークル：右隣→同じ列内の下方向スロット→左隣→その下方向スロット。
+      // 番号順（≒ピンの並び順）に処理して下方向へのみ押し出すことで、
+      // 同一列内のバッジ縦順がピンの縦順と一致し、引き出し線が交差しない。
+      // 上方向は最後の手段（画像下端で詰まった場合など）。
       cands.push([dx, 0]);
-      for (let k = 1; k <= 6; k++) cands.push([dx, -k * (bh + 2)], [dx, k * (bh + 2)]);
+      for (let k = 1; k <= 6; k++) cands.push([dx, k * (bh + 2)]);
       cands.push([-dx, 0]);
-      for (let k = 1; k <= 6; k++) cands.push([-dx, -k * (bh + 2)], [-dx, k * (bh + 2)]);
+      for (let k = 1; k <= 6; k++) cands.push([-dx, k * (bh + 2)]);
+      for (let k = 1; k <= 4; k++) cands.push([dx, -k * (bh + 2)], [-dx, -k * (bh + 2)]);
       cands.push([dx + bw + 2, 0], [-(dx + bw + 2), 0]);
-    } else {     // 通路帯：上→下を交互に、埋まったら外側の段へ
-      for (let k = 0; k < 4; k++) {
-        cands.push([0, -(dy + k * (bh + 1))], [0, dy + k * (bh + 1)]);
-      }
-      cands.push([-bw * 0.75, -dy], [bw * 0.75, -dy], [-dx, 0], [dx, 0]);
+    } else {
+      // 通路帯：上方向にのみ積む（下方向カスケードはピンから離れて対応関係が読めなくなる）。
+      // 画像上端で頭打ちになったら斜め上→最後の手段で真下。
+      for (let k = 0; k < 4; k++) cands.push([0, -(dy + k * (bh + 1))]);
+      cands.push([-bw * 0.75, -dy], [bw * 0.75, -dy], [-dx, 0], [dx, 0], [0, dy]);
     }
     let best = null, bestOv = Infinity, bestC = null;
     for (const [ox, oy] of cands) {
