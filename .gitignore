@@ -1,3 +1,4 @@
 .claude/
 *.png
 *.txt
+!og.png
