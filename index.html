@@ -5869,6 +5869,7 @@ const zoomView = {
   overlay: null, viewport: null, wrap: null, open: false,
   scale: 1, tx: 0, ty: 0,       // 現在の倍率と平行移動（px）
   w: 0, h: 0, ratio: 3,         // 全体表示時の地図サイズ（px）と画像のアスペクト比
+  baked: 1, natW: 3000,         // レイアウトに焼き込んだ倍率と、画像の実ピクセル幅（下記コメント参照）
   MIN: 1, MAX: 4,               // 倍率の下限＝全体表示、上限＝4倍
   DOUBLE_TAP_SCALE: 2.5,        // ダブルタップ時の倍率
 };
@@ -5880,8 +5881,7 @@ function zoomViewFit() {
   let w = VW, h = w / z.ratio;
   if (h > VH) { h = VH; w = h * z.ratio; }
   z.w = w; z.h = h;
-  z.wrap.style.width = w + 'px';
-  z.wrap.style.height = h + 'px';
+  z.baked = 0;   // サイズが変わったので次の apply でレイアウトを更新する
 }
 
 // パン範囲の制限：拡大した地図が画面より小さい軸は中央寄せ、大きい軸は端が画面内に残る範囲にクランプ
@@ -5894,10 +5894,26 @@ function zoomViewClamp() {
   z.ty = sh <= VH ? (VH - sh) / 2 : Math.min(0, Math.max(VH - sh, z.ty));
 }
 
-function zoomViewApply() {
+// 拡大の反映：CSS transform の scale() だけで拡大すると、ブラウザは全体表示サイズで一度描いたビットマップを
+// 引き伸ばすため、「次の場所を表示」やダブルタップで一気に拡大したときに画像がぼやける。
+// そこで倍率を #img-zoom-wrap の実サイズ（width/height）に「焼き込み」、画像を実ピクセルで描き直させる。
+// ピンチ中・ホイール中（live=true）は毎フレームのレイアウトを避けて transform で軽く追従し、指を離した時点で焼き込む。
+// 焼き込む倍率は画像の実ピクセル幅（3000px）を超えない範囲に抑える（それ以上大きくしても鮮明にはならず、メモリを食うだけ）。
+function zoomViewBake() {
+  const z = zoomView;
+  const dpr = window.devicePixelRatio || 1;
+  const cap = Math.max(1, z.natW / (z.w * dpr));
+  const b = Math.min(z.scale, cap);
+  if (b === z.baked) return;
+  z.baked = b;
+  z.wrap.style.width = (z.w * b) + 'px';
+  z.wrap.style.height = (z.h * b) + 'px';
+}
+function zoomViewApply(live) {
   const z = zoomView;
   zoomViewClamp();
-  z.wrap.style.transform = `translate(${z.tx}px, ${z.ty}px) scale(${z.scale})`;
+  if (!live || !z.baked) zoomViewBake();
+  z.wrap.style.transform = `translate(${z.tx}px, ${z.ty}px) scale(${z.scale / z.baked})`;
   const zoomed = z.scale > 1.02;
   const reset = document.getElementById('img-zoom-reset');
   if (reset) reset.style.display = zoomed ? '' : 'none';
@@ -5979,14 +5995,14 @@ function openZoomFocused(id) {
 }
 
 // 画面上の点 (px,py) の下にある地図上の点を動かさずに倍率を newScale にする
-function zoomViewSetScale(newScale, px, py) {
+function zoomViewSetScale(newScale, px, py, live) {
   const z = zoomView;
   newScale = Math.min(z.MAX, Math.max(z.MIN, newScale));
   const cx = (px - z.tx) / z.scale, cy = (py - z.ty) / z.scale;
   z.scale = newScale;
   z.tx = px - cx * newScale;
   z.ty = py - cy * newScale;
-  zoomViewApply();
+  zoomViewApply(live);
 }
 
 function resetZoomView() {
@@ -6041,7 +6057,7 @@ function initZoomView() {
       z.scale = s;
       z.tx = (ax + bx) / 2 - cx * s;
       z.ty = (ay + by) / 2 - cy * s;
-      zoomViewApply();
+      zoomViewApply(true);
     } else if (mode === 'pan' && pan && e.touches.length === 1) {
       const [x, y] = rel(e.touches[0]);
       if (!moved && Math.hypot(x - pan.x, y - pan.y) > 8) moved = true;
@@ -6056,7 +6072,8 @@ function initZoomView() {
         const [x, y] = rel(e.changedTouches[0]);
         const now = Date.now();
         if (!zoomViewIsOnImage(x, y)) {
-          closeZoom();   // 黒い余白をタップ → 閉じる（✕ボタンでも閉じられる）
+          // 黒い余白をタップ → 全体表示のときだけ閉じる（拡大中はパンの指がはみ出しただけの誤タップが多いので無視。✕ボタンで閉じられる）
+          if (z.scale <= 1.02) closeZoom();
         } else if (now - lastTap.t < 320 && Math.hypot(x - lastTap.x, y - lastTap.y) < 40) {
           toggleAt(x, y); lastTap.t = 0;   // ダブルタップ → 2.5倍 ⇄ 全体表示
         } else {
@@ -6064,10 +6081,12 @@ function initZoomView() {
         }
       }
       mode = null; pan = null; pinch = null;
+      zoomViewApply();   // ピンチ終了 → 倍率をレイアウトに焼き込んで鮮明に描き直す
     } else if (e.touches.length === 1) {
       // 2本指→1本指になったらそのままパンに移行（指を離した瞬間に地図が飛ばないよう基準を取り直す）
       const [x, y] = rel(e.touches[0]);
       mode = 'pan'; moved = true; pan = { x, y, tx: z.tx, ty: z.ty }; pinch = null;
+      zoomViewApply();
     }
   }, { passive: false });
   vp.addEventListener('touchcancel', () => { mode = null; pan = null; pinch = null; });
@@ -6092,14 +6111,17 @@ function initZoomView() {
   window.addEventListener('mouseup', e => {
     if (!drag) return;
     const d = drag; drag = null; vp.style.cursor = 'grab';
-    if (!d.moved) { const [x, y] = rel(e); if (!zoomViewIsOnImage(x, y)) closeZoom(); }
+    if (!d.moved && z.scale <= 1.02) { const [x, y] = rel(e); if (!zoomViewIsOnImage(x, y)) closeZoom(); }
   });
   vp.addEventListener('dblclick', e => { if (!z.open) return; e.preventDefault(); const [x, y] = rel(e); toggleAt(x, y); });
+  let wheelBake = 0;
   vp.addEventListener('wheel', e => {
     if (!z.open) return;
     e.preventDefault();
     const [x, y] = rel(e);
-    zoomViewSetScale(z.scale * Math.exp(-e.deltaY * 0.002), x, y);
+    zoomViewSetScale(z.scale * Math.exp(-e.deltaY * 0.002), x, y, true);
+    clearTimeout(wheelBake);
+    wheelBake = setTimeout(() => { if (z.open) zoomViewApply(); }, 120);   // ホイールが止まったら焼き込む
   }, { passive: false });
   document.addEventListener('keydown', e => { if (z.open && e.key === 'Escape') closeZoom(); });
   window.addEventListener('resize', () => { if (!z.open) return; zoomViewFit(); zoomViewApply(); });
@@ -6112,6 +6134,7 @@ function toggleMapZoom(img) {
   const large = document.getElementById('img-zoom-large');
   if (large.src !== img.src) large.src = img.src;
   z.ratio = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 3;
+  z.natW = img.naturalWidth || 3000;
   // 行く予定/あとで/済みの塗りつぶしを複製し、巡回番号などの注釈レイヤーを作る（見るだけの表示で操作はできない）
   syncZoomPins();
   z.overlay.style.display = 'block';
