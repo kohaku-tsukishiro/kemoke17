@@ -2047,7 +2047,8 @@ header h1.app-title {
   transition: opacity 0.15s;
 }
 .route-item.dragging { opacity: 0.4; }
-.route-item.drag-over { border-top: 3px solid var(--orange); }
+.route-item.drag-over-before { box-shadow: 0 -3px 0 0 var(--orange), 0 2px 10px var(--shadow); }   /* この項目の前に入る */
+.route-item.drag-over-after  { box-shadow: 0 3px 0 0 var(--orange), 0 2px 10px var(--shadow); }    /* この項目の後ろに入る */
 .route-item-inner {
   display: flex;
   align-items: center;
@@ -5161,23 +5162,38 @@ function onRouteDragStart(e) {
   e.currentTarget.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
 }
+// ドロップ位置：重ねた項目の上半分なら「前に入れる」、下半分なら「後ろに入れる」。線もその位置に出す
+function routeDropSide(item, clientY) {
+  const r = item.getBoundingClientRect();
+  return clientY < r.top + r.height / 2 ? 'before' : 'after';
+}
+function clearRouteDragOver() {
+  document.querySelectorAll('.route-item.drag-over-before, .route-item.drag-over-after')
+    .forEach(el => el.classList.remove('drag-over-before', 'drag-over-after'));
+}
+function setRouteDragOver(item, side) {
+  clearRouteDragOver();
+  if (item) item.classList.add(side === 'after' ? 'drag-over-after' : 'drag-over-before');
+}
 function onRouteDragOver(e) {
   e.preventDefault();
-  e.currentTarget.classList.add('drag-over');
+  if (e.currentTarget.dataset.id === routeDragId) { clearRouteDragOver(); return; }
+  setRouteDragOver(e.currentTarget, routeDropSide(e.currentTarget, e.clientY));
 }
 function onRouteDragLeave(e) {
-  e.currentTarget.classList.remove('drag-over');
+  e.currentTarget.classList.remove('drag-over-before', 'drag-over-after');
 }
 function onRouteDrop(e) {
   e.preventDefault();
-  e.currentTarget.classList.remove('drag-over');
+  const side = routeDropSide(e.currentTarget, e.clientY);
+  clearRouteDragOver();
   const targetId = e.currentTarget.dataset.id;
   if (!routeDragId || routeDragId === targetId) return;
-  reorderRoute(routeDragId, targetId);
+  reorderRoute(routeDragId, targetId, side);
 }
 function onRouteDragEnd(e) {
   e.currentTarget.classList.remove('dragging');
-  document.querySelectorAll('.route-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+  clearRouteDragOver();
 }
 
 // タッチドラッグ（スマホ向け）
@@ -5208,36 +5224,37 @@ function onRouteTouchMove(e) {
   if (touchClone) {
     touchClone.style.top = (y - 30) + 'px';
   }
-  // 下にあるアイテムを検出してハイライト
-  document.querySelectorAll('.route-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+  // 指の下にあるアイテムを検出し、入る位置（前／後ろ）に線を出す
+  clearRouteDragOver();
   const target = document.elementFromPoint(e.touches[0].clientX, y);
   if (target) {
     const routeItem = target.closest('#route-list .route-item');
     if (routeItem && routeItem.dataset.id !== touchDragId) {
-      routeItem.classList.add('drag-over');
+      setRouteDragOver(routeItem, routeDropSide(routeItem, y));
     }
   }
 }
 
 function onRouteTouchEnd(e) {
   if (!touchDragId) return;
-  // ドロップ先を検出
-  const overItem = document.querySelector('.route-item.drag-over');
+  // ドロップ先を検出（線が出ている位置＝入る位置）
+  const overItem = document.querySelector('.route-item.drag-over-before, .route-item.drag-over-after');
   if (overItem) {
-    reorderRoute(touchDragId, overItem.dataset.id);
+    reorderRoute(touchDragId, overItem.dataset.id, overItem.classList.contains('drag-over-after') ? 'after' : 'before');
   }
   // 片付け
   if (touchClone) { touchClone.remove(); touchClone = null; }
   if (touchDragEl) { touchDragEl.style.opacity = ''; touchDragEl = null; }
-  document.querySelectorAll('.route-item.drag-over').forEach(el => el.classList.remove('drag-over'));
+  clearRouteDragOver();
   touchDragId = null;
 }
 
-function reorderRoute(fromId, toId) {
+// fromId を toId の前（side='before'）または後ろ（side='after'）へ移動する。上下どちらへ動かしても線の位置に入る
+function reorderRoute(fromId, toId, side) {
   const fromIdx = circleOrder.indexOf(fromId);
-  const toIdx = circleOrder.indexOf(toId);
-  if (fromIdx < 0 || toIdx < 0) return;
+  if (fromIdx < 0 || circleOrder.indexOf(toId) < 0 || fromId === toId) return;
   circleOrder.splice(fromIdx, 1);
+  const toIdx = circleOrder.indexOf(toId) + (side === 'after' ? 1 : 0);
   circleOrder.splice(toIdx, 0, fromId);
   saveCircleOrder();
   renderRoute();
