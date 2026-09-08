@@ -4089,8 +4089,8 @@ function renderMapPins() {
 }
 
 // 注釈レイヤーのDOM生成（位置は layoutMapAnnotations が決める）
-// 通常表示で番号ラベルを出す上限（next＋4件）。6件以上は残りを小さなドットと「ほか n件」で示し、詳細ビューでは全件表示する
-const MAP_LABEL_LIMIT = 5;
+// 通常表示で番号ラベルを出す上限（next＋9件）。11件以上は残りを小さなドットと「ほか n件」で示し、詳細ビューでは全件表示する
+const MAP_LABEL_LIMIT = 10;
 function buildMapAnnotations(layer, items, limit) {
   if (!layer) return;
   let html = '<svg class="ann-leaders" aria-hidden="true"></svg>';
