@@ -983,6 +983,8 @@ header h1.app-title {
 
 .shop-item.is-done { }
 .shop-item.is-done .shop-item-inner > * { opacity: 0.45; }
+/* 買えなかったタブでは済みカードを薄くしない（未チェック品を読める濃さで表示。済みはバッジで分かる） */
+#shopping-list.missed-mode .shop-item.is-done .shop-item-inner > * { opacity: 1; }
 .shop-item.is-done .shop-memo { text-decoration: line-through; }
 .shop-item.is-done .shop-item-header .name { text-decoration: line-through; color: var(--brown-light); }
 
@@ -4722,6 +4724,7 @@ function renderShopping() {
 
   const el = document.getElementById('shopping-list');
   if (!el) return;
+  el.classList.toggle('missed-mode', shopFilter === 'missed');
 
   renderBudgetBar();
   renderPurchaseTotals();
