@@ -2732,6 +2732,7 @@ header h1 .unofficial-tag {
     <button class="shop-subtab active" onclick="setShopFilter('all')">全部</button>
     <button class="shop-subtab" onclick="setShopFilter('plan')">行く予定<span class="icon ic-plan"></span></button>
     <button class="shop-subtab" onclick="setShopFilter('done')">済み<span class="icon ic-done"></span></button>
+    <button class="shop-subtab" onclick="setShopFilter('missed')">買えなかった</button>
     <button class="shop-subtab" onclick="setShopFilter('later')">あとで<span class="icon ic-later"></span></button>
     <button class="shop-subtab" onclick="setShopFilter('errand')">お使い<span class="icon ic-errand"></span></button>
   </div>
@@ -4699,7 +4700,7 @@ let shopFilter = 'all';
 function setShopFilter(f) {
   shopFilter = f;
   document.querySelectorAll('.shop-subtab').forEach(b => b.classList.remove('active'));
-  const idx = ['all','plan','done','later','errand'].indexOf(f);
+  const idx = ['all','plan','done','missed','later','errand'].indexOf(f);
   const tabs = document.querySelectorAll('.shop-subtab');
   if (tabs[idx]) tabs[idx].classList.add('active');
   renderShopping();
@@ -4712,6 +4713,8 @@ function renderShopping() {
     if (shopFilter === 'all')   return st === 'plan' || st === 'later' || st === 'done';
     if (shopFilter === 'plan')  return st === 'plan';
     if (shopFilter === 'done')  return st === 'done';
+    // 買えなかった：済みにしたサークルのうち、まだチェックが付いていない欲しいものが残っているもの
+    if (shopFilter === 'missed') return st === 'done' && (checklists[c.id] || []).some(item => !item.done);
     if (shopFilter === 'later') return st === 'later';
     if (shopFilter === 'errand') return getCircleTotals(c.id).errand > 0;
     return false;
@@ -4732,8 +4735,23 @@ function renderShopping() {
       </div>`;
       return;
     }
+    if (shopFilter === 'missed') {
+      el.innerHTML = `<div class="empty-state"><div class="emoji"><span class="icon ic-done"></span></div>
+        <p>買えなかったものはありません</p>
+        <p style="font-size:0.75rem;color:var(--brown-light);margin:8px 0 0;line-height:1.7">「済み」にしたサークルで、チェックが付いていない欲しいものがここに出ます</p></div>`;
+      return;
+    }
     el.innerHTML = '<div class="empty-state"><div class="emoji"><span class="icon ic-list"></span></div><p>このカテゴリにはまだ何もありません</p></div>';
     return;
+  }
+
+  // 買えなかったタブ：件数の見出しを出し、各サークルの欲しいものリストを開いた状態で表示する（未チェック品が見えるように）
+  let missedHeaderHTML = '';
+  if (shopFilter === 'missed') {
+    const missedCount = list.reduce((n, c) => n + (checklists[c.id] || []).filter(item => !item.done).length, 0);
+    list.forEach(c => { openMemos[c.id] = true; });
+    missedHeaderHTML = `<div style="font-size:0.78rem;color:var(--brown-light);margin:0 2px 8px;line-height:1.6">
+      「済み」にした ${list.length} サークルに、チェックが付いていない欲しいものが ${missedCount} 品あります。買えていたらチェックを付けてください。</div>`;
   }
 
   // お使いタブ：依頼者ごとのサマリー＋報告ボタン
@@ -4775,7 +4793,7 @@ function renderShopping() {
     groups[block].sort((a, b) => parseInt(a.id.split('-')[1]) - parseInt(b.id.split('-')[1]));
   });
 
-  let html = errandHeaderHTML;
+  let html = errandHeaderHTML + missedHeaderHTML;
   if (blockRoute) {
     html += `<div style="text-align:right;margin-bottom:6px"><button class="bulk-btn" onclick="resetBlockRoute()" style="font-size:0.7rem;padding:4px 10px">↺ ルート順リセット</button></div>`;
   }
