@@ -1140,7 +1140,7 @@ header h1.app-title {
   flex-shrink: 0;
 }
 .cl-text { flex: 1; cursor: pointer; }
-.cl-remove { cursor: pointer; font-size: 0.7rem; color: #c88; padding: 2px 4px; }
+.cl-remove { cursor: pointer; font-size: 0.8rem; color: #c88; padding: 5px 8px; display: inline-flex; align-items: center; min-height: 32px; }
 .cl-item-sub {
   display: flex;
   align-items: center;
@@ -1159,9 +1159,9 @@ header h1.app-title {
 .cl-qty-label { font-size: 0.66rem; font-weight: 700; color: var(--brown-light); }
 .cl-qty-btn {
   border: none;
-  border-radius: 4px;
-  width: 18px;
-  height: 18px;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
   line-height: 1;
   font-size: 0.78rem;
   font-weight: 900;
@@ -1234,6 +1234,150 @@ header h1.app-title {
   margin-left: 3px;
   vertical-align: 1px;
 }
+/* ===== 欲しいもの：一部購入・依頼者名・お使い依頼入口 ===== */
+.cl-item.partial .cl-item-main .cl-text { color: #8a5a00; }
+.cl-part-mark { color: #C77800; font-weight: 900; margin-right: 2px; }
+.shop-memo-checklist label.partial { color: #8a5a00; }
+.cl-row { display: flex; align-items: center; gap: 6px; }
+.cl-row label { flex: 1; min-width: 0; }
+.cl-row .cl-part-btn { flex-shrink: 0; }
+.shop-memo-checklist .cl-bought-row { margin-left: 22px; }
+.cl-bit { display: inline-block; font-size: 0.7rem; font-weight: 700; color: #1B5E8A; margin-left: 3px; }
+.cl-from-input { display: flex; align-items: center; gap: 2px; font-size: 0.72rem; color: #7A5416; }
+.cl-from-input input {
+  width: 84px;
+  border: 1.5px solid #CBE2F4;
+  border-radius: 6px;
+  padding: 2px 5px;
+  font-family: inherit;
+  font-size: 0.76rem;
+  outline: none;
+  background: #F3F8FC;
+}
+.cl-from-input input:focus { border-color: var(--orange); }
+.cl-part-btn {
+  border: 1.5px solid #E0B25A;
+  background: #FFF6E0;
+  color: #8a5a00;
+  border-radius: 8px;
+  padding: 4px 9px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 30px;
+}
+.errand-ask-bar.compact { padding: 4px 6px; background: transparent; border: none; margin: 2px 0 6px; justify-content: flex-end; }
+.errand-ask-link {
+  background: none;
+  border: none;
+  color: #8a5a00;
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 4px;
+  min-height: 32px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cl-part-btn.active { background: #FFB300; border-color: #FFB300; color: #3a2a00; }
+.cl-bought-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 2px 0 6px 22px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: #FFF6E0;
+  border: 1px dashed #E0B25A;
+}
+.cl-bought-label { font-size: 0.68rem; font-weight: 900; color: #8a5a00; }
+.cl-bought-row .cl-qty-group { background: white; }
+.errand-ask-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #FFF6E0;
+  border: 1px solid #F3DFA8;
+}
+.errand-ask-text { font-size: 0.74rem; color: #8a5a00; font-weight: 700; line-height: 1.5; flex: 1 1 160px; }
+.errand-ask-bar .bulk-btn { font-size: 0.74rem; padding: 6px 10px; flex-shrink: 0; }
+/* お使いタブ：依頼者ごとの品物一覧 */
+.errand-from-card .ef-head { cursor: pointer; user-select: none; }
+.errand-from-card .ef-caret { font-size: 0.7rem; color: var(--brown-light); }
+.ef-sum { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; font-size: 0.72rem; font-weight: 800; }
+.ef-sum span { border-radius: 6px; padding: 2px 7px; }
+.ef-sum .s-done { background: #E8F8EF; color: #1a6640; }
+.ef-sum .s-partial { background: #FFF1C9; color: #8a5a00; }
+.ef-sum .s-none { background: #FDECEA; color: #B3261E; }
+.ef-sum .s-money { background: var(--warm); color: var(--brown); margin-left: auto; }
+.ef-noprice { margin-top: 5px; font-size: 0.7rem; color: #B3261E; font-weight: 700; }
+.ef-items { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; }
+.ef-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--warm);
+  cursor: pointer;
+}
+.ef-item:last-child { border-bottom: none; }
+.ef-item .ef-mark { flex-shrink: 0; font-size: 0.72rem; }
+.ef-item .ef-cid { flex-shrink: 0; font-weight: 800; color: var(--brown); }
+.ef-item .ef-text { flex: 1; min-width: 0; color: var(--text); }
+.ef-item.st-done .ef-text { color: var(--brown-light); text-decoration: line-through; }
+.ef-item .ef-qty { flex-shrink: 0; font-weight: 800; color: var(--brown); }
+.ef-item.st-partial .ef-qty { color: #8a5a00; }
+.ef-item.st-none .ef-qty { color: #B3261E; }
+.ef-item .ef-money { flex-shrink: 0; font-size: 0.72rem; color: var(--brown-light); }
+.shop-item.card-flash { box-shadow: 0 0 0 3px var(--orange); transition: box-shadow 0.2s; }
+/* 案内カード・手順 */
+.errand-guide {
+  background: #FFF6E0;
+  border: 1px solid #F3DFA8;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.errand-guide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #8a5a00;
+  cursor: pointer;
+  user-select: none;
+}
+.errand-guide-caret { font-size: 0.7rem; color: var(--brown-light); }
+.errand-guide-body { padding: 0 12px 10px; }
+.errand-guide.collapsed .errand-guide-body { display: none; }
+.errand-guide-btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.errand-steps {
+  margin: 0;
+  padding-left: 1.4em;
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+.errand-steps li { margin-bottom: 2px; }
+.errand-steps b { color: var(--brown); }
+.errand-section-guide { background: #FFF6E0; }
+/* 買えた額／予定額 */
+.pt-plan { font-weight: 600; color: var(--brown-light); font-size: 0.7rem; }
+.budget-progress-fill { position: absolute; left: 0; top: 0; }
+.budget-progress-fill.plan { background: #CFE8D9; }
+.budget-progress-fill.plan.over { background: #F5C6C0; }
 /* ===== お使い依頼（依頼者モード・取り込み・報告） ===== */
 .errand-overlay {
   display: none;
@@ -1383,7 +1527,6 @@ header h1.app-title {
   padding: 10px 12px;
   margin-bottom: 8px;
   box-shadow: 0 2px 8px var(--shadow);
-  border-left: 4px solid #FFB300;
 }
 .errand-from-card .ef-head {
   display: flex;
@@ -2311,8 +2454,11 @@ header h1 .unofficial-tag {
 .req-cart-item .rm::after { content: ""; position: absolute; inset: -5px; }
 .cl-remove { padding: 8px 10px; margin: -6px 0; font-size: 0.8rem; line-height: 1; }
 .cl-qty-group { padding: 2px 6px; gap: 4px; }
-.cl-qty-btn { width: 24px; height: 24px; position: relative; font-size: 0.85rem; }
-.cl-qty-btn::after { content: ""; position: absolute; inset: -6px; }
+.cl-qty-btn { width: 32px; height: 32px; position: relative; font-size: 0.95rem; }
+.cl-qty-btn::after { content: ""; position: absolute; inset: -4px; }
+.cl-part-btn { min-height: 32px; padding: 4px 10px; font-size: 0.74rem; position: relative; }
+.cl-part-btn::after { content: ""; position: absolute; inset: -4px; }
+.cl-remove { font-size: 0.85rem; padding: 6px 10px; }
 .bulk-btn, .errand-sub-btn, .filter-btn, .shop-subtab, .map-filter-btn, #mapNameToggle { min-height: 40px; }
 .shop-jump-btn { display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 5px 14px; }
 .link-icon { position: relative; }
@@ -2626,6 +2772,27 @@ header h1 .unofficial-tag {
 <!-- 配置タブ -->
 <div id="tab-map" class="tab-content active" style="padding:8px;max-width:none">
 
+  <!-- 自分で行けない人向け：お使い依頼の案内（閉じると記憶） -->
+  <div class="errand-guide collapsed" id="errand-guide" hidden>
+    <div class="errand-guide-head" onclick="toggleErrandGuide()">
+      <span><span class="icon ic-errand"></span> 自分で行けない人へ：お使い依頼のやり方</span>
+      <span class="errand-guide-caret" id="errand-guide-caret">▶ ひらく</span>
+    </div>
+    <div class="errand-guide-body" id="errand-guide-body">
+      <ol class="errand-steps">
+        <li><b>欲しいものを登録</b>：配置図や検索でサークルを開き、欲しいものリストに品名を入れる（自分用の数でOK）</li>
+        <li><b>依頼リンクをつくる</b>：「お使いを依頼する」を押して名前を入れ、リンクをつくる</li>
+        <li><b>リンクを送る</b>：LINEなどで、会場に行く人へ送る</li>
+        <li><b>相手がリンクを開く</b>：あなたの名前つきで、相手のお使いリストに入る。買えた結果は報告文で返ってくる</li>
+      </ol>
+      <div class="errand-guide-btns">
+        <button class="errand-primary-btn" style="width:auto;padding:9px 16px" onclick="openErrandRequestFromList()"><span class="icon ic-errand"></span> お使いを依頼する</button>
+        <button class="errand-sub-btn" onclick="closeErrandGuide()">この案内を閉じる</button>
+      </div>
+      <p class="hint" style="margin-top:6px">閉じても、買い物リストタブの「このリストでお使いを依頼する」から同じ画面を開けます</p>
+    </div>
+  </div>
+
   <!-- 会場マップ（inline SVG）。行く順番タブと共有。タブ切替時にDOM移動して使い回す -->
   <div id="official-map-card" style="background:white;border-radius:12px;padding:8px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow)">
     <!-- 次に行く場所（巡回順の未完了先頭）。タップで詳細ビューをその場所中心に開く -->
@@ -2729,6 +2896,8 @@ header h1 .unofficial-tag {
   <div class="budget-bar" id="budget-bar"></div>
   <!-- お使い精算 -->
   <div class="purchase-totals-bar" id="purchase-totals-bar"></div>
+  <!-- 欲しいものリストからお使い依頼をつくる（頼む側の入口） -->
+  <div class="errand-ask-bar" id="errand-ask-bar"></div>
   <!-- サブタブ -->
   <div class="shop-subtabs" id="shop-subtabs">
     <button class="shop-subtab active" onclick="setShopFilter('all')">全部</button>
@@ -2775,7 +2944,7 @@ header h1 .unofficial-tag {
     <h3><span class="icon ic-errand"></span> お使い依頼</h3>
     <p style="font-size:0.82rem;color:var(--brown-light);line-height:1.7;margin-bottom:8px">
       会場に行く人へ「これ買ってきて」を頼めます。<br>
-      欲しい品物を選んで依頼リンクをつくり、LINEなどで送ってください。<br>
+      買い物リストタブで欲しいものリストを作り「このリストでお使いを依頼する」を押すと、依頼リンクができます。LINEなどで送ってください。<br>
       受け取った人がリンクを開くと、あなたの名前つきでお使いリストに追加されます。
     </p>
     <button class="errand-primary-btn" onclick="openErrandRequest()">お使い依頼をつくる</button>
@@ -2815,19 +2984,29 @@ header h1 .unofficial-tag {
     <button onclick="closeErrandRequest()" aria-label="閉じる">✕</button>
   </div>
   <div class="errand-overlay-body">
+    <div class="errand-section errand-section-guide">
+      <h4>お使い依頼の流れ</h4>
+      <ol class="errand-steps">
+        <li><b>欲しいものを登録</b>：配置図や検索でサークルを開き、欲しいものリストに品名を入れる（自分用の数でOK）</li>
+        <li><b>依頼リンクをつくる</b>：「お使いを依頼する」を押して名前を入れ、リンクをつくる</li>
+        <li><b>リンクを送る</b>：LINEなどで、会場に行く人へ送る</li>
+        <li><b>相手がリンクを開く</b>：あなたの名前つきで、相手のお使いリストに入る。買えた結果は報告文で返ってくる</li>
+      </ol>
+    </div>
     <div class="errand-section">
       <h4>あなたの名前</h4>
       <input type="text" class="errand-input" id="req-name" placeholder="例）もぐもぐ" maxlength="50" oninput="setReqName(this.value)">
       <p class="hint" style="margin-top:5px">品物と一緒に、買ってきてくれる人へ伝わります</p>
     </div>
     <div class="errand-section">
-      <h4><span class="icon ic-search"></span> サークルを探して品物を追加</h4>
-      <input type="text" class="errand-input" id="req-search" placeholder="サークル名・代表者名・配置番号で検索..." oninput="renderReqSearch()">
-      <div id="req-search-results"></div>
+      <h4><span class="icon ic-list"></span> 依頼する品物</h4>
+      <button class="errand-sub-btn" style="margin-bottom:8px" onclick="loadReqFromChecklists()"><span class="icon ic-list"></span> 欲しいものリストから読み込む</button>
+      <div id="req-cart"></div>
     </div>
     <div class="errand-section">
-      <h4><span class="icon ic-list"></span> 依頼する品物</h4>
-      <div id="req-cart"></div>
+      <h4><span class="icon ic-search"></span> リストにない品物を追加</h4>
+      <input type="text" class="errand-input" id="req-search" placeholder="サークル名・代表者名・配置番号で検索..." oninput="renderReqSearch()">
+      <div id="req-search-results"></div>
     </div>
     <button class="errand-primary-btn" onclick="generateRequestLink()">依頼リンクをつくる</button>
     <div class="errand-section" id="req-link-section" style="display:none;margin-top:10px">
@@ -3741,8 +3920,8 @@ function circleCardHTML(c) {
       <div class="shop-item-header">
         <div>
           ${st ? `<span class="status-badge ${badgeClass}">${badgeText}</span>` : ''}
-          ${circleTotals.errand ? `<span class="circle-errand-chip"><span class="icon ic-errand"></span> ¥${circleTotals.errand.toLocaleString()}</span>` : ''}
-          ${circleTotals.self ? `<span class="circle-self-chip"><span class="icon ic-self"></span> ¥${circleTotals.self.toLocaleString()}</span>` : ''}
+          ${circleTotals.errand ? `<span class="circle-errand-chip"><span class="icon ic-errand"></span> ${moneyPair(circleTotals.boughtErrand, circleTotals.errand)}</span>` : ''}
+          ${circleTotals.self ? `<span class="circle-self-chip"><span class="icon ic-self"></span> ${moneyPair(circleTotals.boughtSelf, circleTotals.self)}</span>` : ''}
           <div class="name">${c.name}</div>
           <div style="font-size:0.75rem;color:var(--brown-light)">${id} ／ ${c.rep}</div>
           ${links ? `<div class="circle-links" style="margin-top:3px">${links}</div>` : ''}
@@ -4459,6 +4638,15 @@ function addChecklistItem(id) {
   if (!checklists[id]) checklists[id] = [];
   checklists[id].push({ text, done: false, price: 0, selfQty: 1, errandQty: 0 });
   saveChecklists();
+  // 欲しいものを入れたサークルは「行く予定」にする（買い物リストに出るように）
+  if (!status[id]) {
+    status[id] = 'plan';
+    save();
+    updateCounts();
+    renderCircles();
+    if (document.getElementById('tab-map').classList.contains('active')) renderMapLayout();
+    showToast('行く予定に追加しました');
+  }
   renderPurchaseTotals();
   // メモは開いたまま再描画
   openMemos[id] = true;
@@ -4476,7 +4664,12 @@ function addChecklistItem(id) {
 
 function toggleChecklistItem(id, idx) {
   if (!checklists[id] || !checklists[id][idx]) return;
-  checklists[id][idx].done = !checklists[id][idx].done;
+  const item = checklists[id][idx];
+  item.done = !item.done;
+  // チェックを付ける＝全数買えた、外す＝未購入。どちらも「一部だけ」状態は解除する
+  item.partial = false;
+  delete item.bSelf;
+  delete item.bErr;
   saveChecklists();
   renderPurchaseTotals();
   // カード再描画
@@ -4524,9 +4717,85 @@ function adjustChecklistQty(id, idx, field, delta) {
   const item = checklists[id][idx];
   const key = field === 'self' ? 'selfQty' : 'errandQty';
   item[key] = Math.max(0, (item[key] || 0) + delta);
+  // 買えた数は頼まれた数を超えない
+  if (item.partial) {
+    if (field === 'self') item.bSelf = Math.min(item.bSelf || 0, item.selfQty);
+    else item.bErr = Math.min(item.bErr || 0, item.errandQty);
+  }
   saveChecklists();
   renderPurchaseTotals();
   refreshCircleUI(id);
+}
+
+// 依頼者名（手入力のお使い品にも付けられる。依頼リンクから取り込んだ品は最初から入っている）
+function setChecklistItemFrom(id, idx, val) {
+  if (!checklists[id] || !checklists[id][idx]) return;
+  const v = String(val || '').trim().slice(0, REQ_LIMITS.name);
+  if (v) checklists[id][idx].from = v; else delete checklists[id][idx].from;
+  saveChecklists();
+  renderPurchaseTotals();
+  refreshCircleUI(id);
+}
+
+// 「一部だけ買えた」：部数不足などで頼まれた数に届かなかったときに、買えた数を記録する
+function toggleChecklistPartial(id, idx) {
+  if (!checklists[id] || !checklists[id][idx]) return;
+  const item = checklists[id][idx];
+  if (item.partial) {
+    item.partial = false;
+    delete item.bSelf;
+    delete item.bErr;
+  } else {
+    item.partial = true;
+    item.done = false;
+    item.bSelf = 0;
+    item.bErr = 0;
+  }
+  saveChecklists();
+  renderPurchaseTotals();
+  refreshCircleUI(id);
+}
+function adjustBoughtQty(id, idx, field, delta) {
+  if (!checklists[id] || !checklists[id][idx]) return;
+  const item = checklists[id][idx];
+  if (!item.partial) return;
+  const key = field === 'self' ? 'bSelf' : 'bErr';
+  const max = field === 'self' ? (item.selfQty || 0) : (item.errandQty || 0);
+  item[key] = Math.min(max, Math.max(0, (item[key] || 0) + delta));
+  // 買えた数が全数に達したら「済み」に昇格する
+  const need = (item.selfQty || 0) + (item.errandQty || 0);
+  const got = Math.min(item.selfQty || 0, item.bSelf || 0) + Math.min(item.errandQty || 0, item.bErr || 0);
+  if (need > 0 && got >= need) {
+    item.done = true;
+    item.partial = false;
+    delete item.bSelf;
+    delete item.bErr;
+  }
+  saveChecklists();
+  renderPurchaseTotals();
+  refreshCircleUI(id);
+}
+// 買えた数 { self, errand }：済み＝全数、一部＝記録した数、それ以外＝0
+function getBoughtQty(item) {
+  const s = item.selfQty || 0, e = item.errandQty || 0;
+  if (item.done) return { self: s, errand: e };
+  if (item.partial) return { self: Math.min(s, item.bSelf || 0), errand: Math.min(e, item.bErr || 0) };
+  return { self: 0, errand: 0 };
+}
+// 品物の状態：'done'（全部買えた）／'partial'（一部だけ買えた）／'none'（買えていない）
+function itemState(item) {
+  if (item.done) return 'done';
+  if (item.partial) {
+    const b = getBoughtQty(item);
+    const need = (item.selfQty || 0) + (item.errandQty || 0);
+    if (need > 0 && b.self + b.errand >= need) return 'done';
+    if (b.self + b.errand > 0) return 'partial';
+  }
+  return 'none';
+}
+function errandFromLabel(item) {
+  const f = (item.from || '').trim();
+  return f ? escapeHTML(f) + 'さん' : 'お使い';
 }
 
 // カード／買い物リスト／マップ詳細パネルの該当箇所をまとめて再描画
@@ -4547,26 +4816,38 @@ function refreshCircleUI(id) {
   if (panel && panel.style.display === 'block') showCellDetail(id);
 }
 
+// サークルごとの金額。self/errand は予定額（数量×単価）、boughtSelf/boughtErrand は買えた分の額
 function getCircleTotals(id) {
   const items = checklists[id] || [];
-  let self = 0, errand = 0;
+  let self = 0, errand = 0, boughtSelf = 0, boughtErrand = 0;
   items.forEach(item => {
     const price = item.price || 0;
     if (!price) return;
     self += price * (item.selfQty || 0);
     errand += price * (item.errandQty || 0);
+    const b = getBoughtQty(item);
+    boughtSelf += price * b.self;
+    boughtErrand += price * b.errand;
   });
-  return { self, errand };
+  return { self, errand, boughtSelf, boughtErrand };
 }
 
 function getPurchaseTotals() {
-  let self = 0, errand = 0;
+  let self = 0, errand = 0, boughtSelf = 0, boughtErrand = 0;
   Object.keys(checklists).forEach(id => {
     const t = getCircleTotals(id);
     self += t.self;
     errand += t.errand;
+    boughtSelf += t.boughtSelf;
+    boughtErrand += t.boughtErrand;
   });
-  return { self, errand, total: self + errand };
+  return { self, errand, total: self + errand, boughtSelf, boughtErrand, boughtTotal: boughtSelf + boughtErrand };
+}
+// 「¥買えた／予定 ¥予定」（同額なら買えた額だけ）
+function moneyPair(bought, planned) {
+  const b = '¥' + bought.toLocaleString();
+  if (bought === planned) return b;
+  return `${b}<span class="pt-plan">／予定 ¥${planned.toLocaleString()}</span>`;
 }
 
 function escapeHTML(s) {
@@ -4574,17 +4855,21 @@ function escapeHTML(s) {
 }
 
 // 依頼者名ごとにお使い品を集計する
-// 戻り値: { 依頼者名: { items: [{id, idx, item}], total, boughtCount } }
+// 戻り値: { 依頼者名: { items: [{id, idx, item}], total(予定額), bought(実際に買えた分の額), doneCount, partialCount, noneCount } }
 function getErrandsByFrom() {
   const groups = {};
   Object.keys(checklists).forEach(id => {
     (checklists[id] || []).forEach((item, idx) => {
       if (!(item.errandQty > 0)) return;
       const from = (item.from || '').trim() || '（名前なし）';
-      if (!groups[from]) groups[from] = { items: [], total: 0, boughtCount: 0 };
-      groups[from].items.push({ id, idx, item });
-      groups[from].total += (item.price || 0) * item.errandQty;
-      if (item.done) groups[from].boughtCount++;
+      if (!groups[from]) groups[from] = { items: [], total: 0, bought: 0, doneCount: 0, partialCount: 0, noneCount: 0, noPrice: 0 };
+      const g = groups[from];
+      g.items.push({ id, idx, item });
+      if (!(item.price > 0)) g.noPrice++;
+      g.total += (item.price || 0) * item.errandQty;
+      g.bought += (item.price || 0) * getBoughtQty(item).errand;
+      const stt = itemState(item);
+      if (stt === 'done') g.doneCount++; else if (stt === 'partial') g.partialCount++; else g.noneCount++;
     });
   });
   return groups;
@@ -4600,16 +4885,17 @@ function renderPurchaseTotals() {
   let fromHTML = '';
   if (fromNames.length > 0 && !(fromNames.length === 1 && fromNames[0] === '（名前なし）')) {
     fromHTML = `<div class="purchase-totals-byfrom">` +
-      fromNames.map(n => `<span class="pt-from-chip">${escapeHTML(n)} ¥${fromGroups[n].total.toLocaleString()}</span>`).join('') +
+      fromNames.map(n => `<span class="pt-from-chip">${escapeHTML(n)} ${moneyPair(fromGroups[n].bought, fromGroups[n].total)}</span>`).join('') +
       `</div>`;
   }
   el.innerHTML = `
-    <div class="purchase-totals-header"><h3><span class="icon ic-receipt"></span> お使い精算</h3></div>
+    <div class="purchase-totals-header"><h3><span class="icon ic-receipt"></span> お使い精算 <span style="font-size:0.7rem;font-weight:700;color:var(--brown-light)">買えた分の金額。チェックを付けると増えます</span></h3></div>
     <div class="purchase-totals-row">
-      <span class="pt-self"><span class="icon ic-self"></span> 自分用 ¥${t.self.toLocaleString()}</span>
-      <span class="pt-errand"><span class="icon ic-errand"></span> お使い用 ¥${t.errand.toLocaleString()}</span>
-      <span class="pt-total">合計 ¥${t.total.toLocaleString()}</span>
+      <span class="pt-self"><span class="icon ic-self"></span> 自分用 ${moneyPair(t.boughtSelf, t.self)}</span>
+      <span class="pt-errand"><span class="icon ic-errand"></span> お使い用 ${moneyPair(t.boughtErrand, t.errand)}</span>
+      <span class="pt-total">合計 ${moneyPair(t.boughtTotal, t.total)}</span>
     </div>${fromHTML}`;
+  renderBudgetBar();
 }
 
 function checklistHTML(id, editable) {
@@ -4621,22 +4907,52 @@ function checklistHTML(id, editable) {
     const price = item.price || 0;
     const selfQty = item.selfQty || 0;
     const errandQty = item.errandQty || 0;
-    const fromChip = (item.from && item.from.trim()) ? ` <span class="cl-from-chip"><span class="icon ic-errand"></span>${escapeHTML(item.from)}</span>` : '';
+    const stt = itemState(item);
+    const b = getBoughtQty(item);
+    const isPartial = stt === 'partial';
+    const stClass = item.done ? 'checked' : isPartial ? 'partial' : '';
+    const partMark = isPartial ? '<b class="cl-part-mark">△</b> ' : '';
+    // 「○○さん ×2」／「お使い ×2」。一部だけ買えたときは「1／2」
+    const fromChip = errandQty
+      ? ` <span class="cl-from-chip"><span class="icon ic-errand"></span>${errandFromLabel(item)} ${isPartial ? `${b.errand}／${errandQty}` : `×${errandQty}`}</span>`
+      : '';
+    // 買えた数の入力行（一部だけ買えたとき。簡易表示・編集表示の両方で使う）
+    const boughtRow = item.partial ? `<div class="cl-bought-row">
+        <span class="cl-bought-label">買えた数</span>
+        ${selfQty ? `<span class="cl-qty-group">
+          <span class="cl-qty-label"><span class="icon ic-self"></span>自分</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustBoughtQty('${id}',${idx},'self',-1)">−</button>
+          <span class="cl-qty-num">${b.self}／${selfQty}</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustBoughtQty('${id}',${idx},'self',1)">＋</button>
+        </span>` : ''}
+        ${errandQty ? `<span class="cl-qty-group">
+          <span class="cl-qty-label"><span class="icon ic-errand"></span>${errandFromLabel(item)}</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustBoughtQty('${id}',${idx},'errand',-1)">−</button>
+          <span class="cl-qty-num">${b.errand}／${errandQty}</span>
+          <button type="button" class="cl-qty-btn" onclick="adjustBoughtQty('${id}',${idx},'errand',1)">＋</button>
+        </span>` : ''}
+        ${(!selfQty && !errandQty) ? '<span class="hint">数量が0なので記録できません</span>' : ''}
+      </div>` : '';
     if (!editable) {
       const bits = [];
-      if (selfQty) bits.push(`<span class="icon ic-self"></span>×${selfQty}`);
-      if (errandQty) bits.push(`<span class="icon ic-errand"></span>×${errandQty}`);
+      if (selfQty) bits.push(`<span class="cl-bit"><span class="icon ic-self"></span>${isPartial ? `${b.self}／${selfQty}` : `×${selfQty}`}</span>`);
       const badge = bits.length ? ' ' + bits.join(' ') : '';
-      html += `<label class="${item.done ? 'checked' : ''}">
-        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
-        <span style="flex:1">${escapeHTML(item.text)}${price ? ` <b>¥${price.toLocaleString()}</b>` : ''}${badge}${fromChip}</span>
-      </label>`;
+      // 「一部だけ」はラベルの外に置く（ラベル内だとチェックが切り替わってしまう）
+      const partBtn = (!item.done && (selfQty || errandQty))
+        ? `<button type="button" class="cl-part-btn${item.partial ? ' active' : ''}" onclick="toggleChecklistPartial('${id}',${idx})">${item.partial ? '一部買えた ✓' : '一部買えた'}</button>`
+        : '';
+      html += `<div class="cl-row">
+        <label class="${stClass}">
+          <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
+          <span style="flex:1">${partMark}${escapeHTML(item.text)}${price ? ` <b>¥${price.toLocaleString()}</b>` : ''}${badge}${fromChip}</span>
+        </label>${partBtn}
+      </div>${boughtRow}`;
       return;
     }
-    html += `<div class="cl-item ${item.done ? 'checked' : ''}">
+    html += `<div class="cl-item ${stClass}">
       <div class="cl-item-main">
         <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
-        <span class="cl-text" onclick="toggleChecklistItem('${id}',${idx})">${escapeHTML(item.text)}${fromChip}</span>
+        <span class="cl-text" onclick="toggleChecklistItem('${id}',${idx})">${partMark}${escapeHTML(item.text)}${fromChip}</span>
         <span class="cl-remove" role="button" aria-label="この品物を削除" onclick="removeChecklistItem('${id}',${idx})">✕</span>
       </div>
       <div class="cl-item-sub">
@@ -4653,7 +4969,10 @@ function checklistHTML(id, editable) {
           <button type="button" class="cl-qty-btn" onclick="adjustChecklistQty('${id}',${idx},'errand',1)">＋</button>
         </span>
         <span class="cl-price-input">単価¥<input type="number" value="${price||''}" placeholder="0" min="0" step="10" onchange="setChecklistItemPrice('${id}',${idx},this.value)"></span>
+        ${errandQty ? `<span class="cl-from-input"><span class="icon ic-errand"></span><input type="text" placeholder="誰に頼まれた？" maxlength="50" value="${escapeHTML(item.from || '')}" onchange="setChecklistItemFrom('${id}',${idx},this.value)"></span>` : ''}
+        ${!item.done ? `<button type="button" class="cl-part-btn${item.partial ? ' active' : ''}" onclick="toggleChecklistPartial('${id}',${idx})">${item.partial ? '一部買えた ✓' : '一部買えた'}</button>` : ''}
       </div>
+      ${boughtRow}
     </div>`;
   });
   if (editable) {
@@ -4708,7 +5027,23 @@ function setShopFilter(f) {
   renderShopping();
 }
 
+// 買い物リスト上部の「お使いを依頼する」バー。頼まれた品を持っている人（会場に行く側）には1行に縮める
+function renderAskBar() {
+  const el = document.getElementById('errand-ask-bar');
+  if (!el) return;
+  const isReceiver = Object.keys(getErrandsByFrom()).length > 0;
+  if (isReceiver) {
+    el.classList.add('compact');
+    el.innerHTML = `<button type="button" class="errand-ask-link" onclick="openErrandRequestFromList()">自分が頼む側なら：このリストでお使いを依頼する ›</button>`;
+  } else {
+    el.classList.remove('compact');
+    el.innerHTML = `<span class="errand-ask-text">自分で行けないときは、この欲しいものリストをそのまま頼めます</span>
+    <button class="bulk-btn" onclick="openErrandRequestFromList()"><span class="icon ic-errand"></span> このリストでお使いを依頼する</button>`;
+  }
+}
+
 function renderShopping() {
+  renderAskBar();
   const blockColors = {A:'#FF7A35',B:'#FF6B9D',C:'#4CAF7D',D:'#667eea',E:'#FFB300',F:'#00BCD4',G:'#9C27B0',H:'#FF5722',I:'#795548',J:'#607D8B',K:'#E91E63',L:'#8BC34A',M:'#FF9800',N:'#00897B',O:'#3949AB',P:'#8D6E63',Q:'#EC407A',R:'#7CB342',S:'#5D4037'};
   let list = CIRCLES.filter(c => {
     const st = status[c.id];
@@ -4718,7 +5053,7 @@ function renderShopping() {
     // 買えなかった：済みにしたサークルのうち、まだチェックが付いていない欲しいものが残っているもの
     if (shopFilter === 'missed') return st === 'done' && (checklists[c.id] || []).some(item => !item.done);
     if (shopFilter === 'later') return st === 'later';
-    if (shopFilter === 'errand') return getCircleTotals(c.id).errand > 0;
+    if (shopFilter === 'errand') return (checklists[c.id] || []).some(item => item.errandQty > 0);
     return false;
   });
 
@@ -4733,8 +5068,17 @@ function renderShopping() {
     if (shopFilter === 'errand') {
       el.innerHTML = errandPasteBoxHTML() + `<div class="empty-state"><div class="emoji"><span class="icon ic-errand"></span></div>
         <p>お使い品はまだありません</p>
-        <p style="font-size:0.75rem;color:var(--brown-light);margin:8px 0 10px;line-height:1.7">友だちから受け取った依頼リンクを開くか<br>上の欄にリンクを貼り付けると追加されます</p>
-        <button class="errand-sub-btn" onclick="openErrandRequest()">自分が頼む側なら：お使い依頼をつくる</button>
+        <p style="font-size:0.75rem;color:var(--brown-light);margin:8px 0 10px;line-height:1.7"><b>頼まれる側</b>：友だちから受け取った依頼リンクを開くか<br>上の欄にリンクを貼り付けると、ここに追加されます</p>
+        <div style="text-align:left;background:#FFF6E0;border-radius:10px;padding:10px 12px;margin:0 0 10px">
+          <div style="font-size:0.8rem;font-weight:900;color:#8a5a00;margin-bottom:4px"><span class="icon ic-errand"></span> 頼む側（自分で行けない人）の流れ</div>
+          <ol class="errand-steps">
+        <li><b>欲しいものを登録</b>：配置図や検索でサークルを開き、欲しいものリストに品名を入れる（自分用の数でOK）</li>
+        <li><b>依頼リンクをつくる</b>：「お使いを依頼する」を押して名前を入れ、リンクをつくる</li>
+        <li><b>リンクを送る</b>：LINEなどで、会場に行く人へ送る</li>
+        <li><b>相手がリンクを開く</b>：あなたの名前つきで、相手のお使いリストに入る。買えた結果は報告文で返ってくる</li>
+      </ol>
+        </div>
+        <button class="errand-sub-btn" onclick="openErrandRequestFromList()">自分が頼む側なら：お使いを依頼する</button>
       </div>`;
       return;
     }
@@ -4762,16 +5106,40 @@ function renderShopping() {
   if (shopFilter === 'errand') {
     errandHeaderHTML += errandPasteBoxHTML();
     const fromGroups = getErrandsByFrom();
-    errandHeaderHTML = Object.keys(fromGroups).map(n => {
+    errandHeaderHTML += Object.keys(fromGroups).sort((a, b) => a.localeCompare(b, 'ja')).map(n => {
       const g = fromGroups[n];
       const enc = encodeURIComponent(n).replace(/'/g, '%27');
+      const open = errandCardOpen[n] !== false;
+      const rows = g.items.map(({ id, item }) => {
+        const c = CIRCLES.find(x => x.id === id);
+        const stt = itemState(item);
+        const bq = getBoughtQty(item).errand;
+        const mark = stt === 'done' ? '✅' : stt === 'partial' ? '△' : '❌';
+        const qty = stt === 'partial' ? `${bq}／${item.errandQty} 部数不足` : stt === 'none' ? `×${item.errandQty} 未購入` : `×${item.errandQty}`;
+        const money = (item.price || 0) * bq;
+        return `<div class="ef-item st-${stt}" onclick="jumpToShopCard('${id}')">
+          <span class="ef-mark">${mark}</span>
+          <span class="ef-cid">${id}</span>
+          <span class="ef-text">${c ? escapeHTML(c.name) : ''}「${escapeHTML(item.text)}」</span>
+          <span class="ef-qty">${qty}</span>
+          <span class="ef-money">${money ? '¥' + money.toLocaleString() : ''}</span>
+        </div>`;
+      }).join('');
       return `<div class="errand-from-card">
-        <div class="ef-head"><span class="icon ic-errand"></span> ${escapeHTML(n)}${n === '（名前なし）' ? '' : 'さん'}の依頼
-          <span class="ef-stats">${g.boughtCount}/${g.items.length} 済み ・ ¥${g.total.toLocaleString()}</span></div>
+        <div class="ef-head" onclick="toggleErrandCard(decodeURIComponent('${enc}'))"><span class="icon ic-errand"></span> ${escapeHTML(n)}${n === '（名前なし）' ? '' : 'さん'}の依頼
+          <span class="ef-stats"><span class="ef-caret">${open ? '▲' : '▼'}</span></span></div>
+        <div class="ef-sum">
+          <span class="s-done">✅ 買えた ${g.doneCount}</span>
+          <span class="s-partial">△ 一部 ${g.partialCount}</span>
+          <span class="s-none">❌ 未 ${g.noneCount}</span>
+          <span class="s-money">立て替え ¥${g.bought.toLocaleString()}${g.total !== g.bought ? ` ／ 予定 ¥${g.total.toLocaleString()}` : ''}</span>
+        </div>
+        ${g.noPrice ? `<div class="ef-noprice">単価が未入力の品が ${g.noPrice}件あります。金額はその分を除いた合計です</div>` : ''}
+        ${open ? `<div class="ef-items">${rows}</div>
         <div class="ef-btns">
           <button class="errand-sub-btn" onclick="copyErrandReport(decodeURIComponent('${enc}'))">報告をコピー</button>
           <button class="errand-sub-btn" onclick="shareErrandReport(decodeURIComponent('${enc}'))">共有</button>
-        </div>
+        </div>` : ''}
       </div>`;
     }).join('');
   }
@@ -4845,9 +5213,13 @@ function setBudget() {
 function renderBudgetBar() {
   const el = document.getElementById('budget-bar');
   if (!el) return;
-  const total = getPurchaseTotals().self;
+  const pt = getPurchaseTotals();
+  const total = pt.boughtSelf;   // 使用額＝買えた分
+  const planned = pt.self;       // 予定額＝欲しいものの合計
   const pct = budget > 0 ? Math.min(100, Math.round(total / budget * 100)) : 0;
+  const planPct = budget > 0 ? Math.min(100, Math.round(planned / budget * 100)) : 0;
   const over = budget > 0 && total > budget;
+  const planOver = budget > 0 && planned > budget;
   const remain = budget > 0 ? budget - total : 0;
 
   el.innerHTML = `
@@ -4861,11 +5233,13 @@ function renderBudgetBar() {
     </div>
     ${budget > 0 ? `
       <div class="budget-progress-bar">
+        <div class="budget-progress-fill plan ${planOver?'over':''}" style="width:${planPct}%"></div>
         <div class="budget-progress-fill ${over?'over':''}" style="width:${pct}%"></div>
         <div class="budget-progress-text">${total.toLocaleString()}円 / ${budget.toLocaleString()}円 (${pct}%)</div>
       </div>
       <div class="budget-detail">
-        <span>使用: ¥${total.toLocaleString()}</span>
+        <span>使用（買えた分）: ¥${total.toLocaleString()}</span>
+        <span style="${planOver?'color:#e74c3c;font-weight:800':''}">予定: ¥${planned.toLocaleString()}</span>
         <span style="${over?'color:#e74c3c;font-weight:800':''}">残り: ¥${remain.toLocaleString()}</span>
       </div>
     ` : `<div style="font-size:0.78rem;color:var(--brown-light)"><span class="icon ic-settings"></span> 設定から予算額を入力してください</div>`}
@@ -5035,7 +5409,7 @@ function renderRouteLater() {
     if (!c) return '';
     const memo = memos[id] || '';
     const cl = checklists[id] || [];
-    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>x.done).length}/${cl.length}` : '';
+    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>itemState(x)==='done').length}/${cl.length}${cl.some(x=>itemState(x)==='partial') ? ` <span style="color:#C77800">△${cl.filter(x=>itemState(x)==='partial').length}</span>` : ''}` : '';
     const isExpanded = openRouteItems[id];
 
     return `<div class="route-item" data-id="${id}">
@@ -5087,7 +5461,7 @@ function renderRouteDone() {
     if (!c) return '';
     const memo = memos[id] || '';
     const cl = checklists[id] || [];
-    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>x.done).length}/${cl.length}` : '';
+    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>itemState(x)==='done').length}/${cl.length}${cl.some(x=>itemState(x)==='partial') ? ` <span style="color:#C77800">△${cl.filter(x=>itemState(x)==='partial').length}</span>` : ''}` : '';
     const isExpanded = openRouteItems[id];
 
     return `<div class="route-item" data-id="${id}">
@@ -5144,7 +5518,7 @@ function renderRoute() {
     if (!c) return '';
     const memo = memos[id] || '';
     const cl = checklists[id] || [];
-    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>x.done).length}/${cl.length}` : '';
+    const clSummary = cl.length > 0 ? `<span class="icon ic-list"></span> ${cl.filter(x=>itemState(x)==='done').length}/${cl.length}${cl.some(x=>itemState(x)==='partial') ? ` <span style="color:#C77800">△${cl.filter(x=>itemState(x)==='partial').length}</span>` : ''}` : '';
     const isExpanded = openRouteItems[id];
     const hasMemo = memo || cl.length > 0;
 
@@ -5317,6 +5691,79 @@ function closeErrandRequest() {
   document.getElementById('errand-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
+
+// 買い物リストタブの「このリストでお使いを依頼する」：欲しいものリストを流し込んで依頼画面を開く
+function openErrandRequestFromList() {
+  openErrandRequest();
+  loadReqFromChecklists();
+}
+// 欲しいものリスト（未チェック・自分用の数が1以上・人から頼まれた品ではないもの）を依頼カートへ追加する。
+// すでに同じサークル・同じ品名がカートにある品は重複させない。
+function loadReqFromChecklists() {
+  let added = 0, skipped = 0;
+  Object.keys(checklists).forEach(cid => {
+    if (!CIRCLES.some(c => c.id === cid)) return;
+    (checklists[cid] || []).forEach(item => {
+      if ((item.from || '').trim()) return;   // 頼まれた品は自分の依頼には含めない
+      if (item.done) return;
+      const qty = item.selfQty || 0;
+      const text = (item.text || '').trim();
+      if (qty < 1 || !text) return;
+      if (myRequest.items.some(r => r.cid === cid && (r.text || '').trim() === text)) { skipped++; return; }
+      myRequest.items.push({
+        cid,
+        text: text.slice(0, REQ_LIMITS.text),
+        qty: Math.min(REQ_LIMITS.qtyMax, qty),
+        price: Math.min(REQ_LIMITS.priceMax, Math.max(0, parseInt(item.price) || 0))
+      });
+      added++;
+    });
+  });
+  saveMyRequest();
+  renderReqCart();
+  if (added) showToast(`欲しいものリストから ${added}品を読み込みました${skipped ? `（${skipped}品は追加済み）` : ''}`);
+  else if (skipped) showToast('欲しいものリストの品はすべて追加済みです');
+  else showToast('読み込める品がありません（未チェックで「自分」の数が1以上の品が対象です）');
+}
+
+// 配置図タブ上部の案内カード：閉じたら記憶する。折りたたみは画面内のみ
+function initErrandGuide() {
+  const el = document.getElementById('errand-guide');
+  if (!el) return;
+  let closed = false;
+  try { closed = localStorage.getItem('kk_errand_guide_closed') === '1'; } catch (e) {}
+  el.hidden = closed;
+}
+function toggleErrandGuide() {
+  const el = document.getElementById('errand-guide');
+  if (!el) return;
+  el.classList.toggle('collapsed');
+  const caret = document.getElementById('errand-guide-caret');
+  if (caret) caret.textContent = el.classList.contains('collapsed') ? '▶ ひらく' : '▼ とじる';
+}
+function closeErrandGuide() {
+  const el = document.getElementById('errand-guide');
+  if (el) el.hidden = true;
+  try { localStorage.setItem('kk_errand_guide_closed', '1'); } catch (e) {}
+  showToast('案内を閉じました。買い物リストタブからも依頼できます');
+}
+
+// お使いタブの依頼者カードの開閉状態（画面内のみ）
+const errandCardOpen = {};
+function toggleErrandCard(name) {
+  errandCardOpen[name] = errandCardOpen[name] === false;
+  renderShopping();
+}
+// お使いタブの品物行 → 買い物リスト内のサークルカードへ移動して強調
+function jumpToShopCard(id) {
+  openMemos[id] = true;
+  renderShopping();
+  const card = document.querySelector(`#shopping-list [id="card-${id}"]`);
+  if (!card) return;
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  card.classList.add('card-flash');
+  setTimeout(() => card.classList.remove('card-flash'), 2000);
+}
 function setReqName(v) { myRequest.name = String(v || '').slice(0, REQ_LIMITS.name); saveMyRequest(); }
 
 function renderReqSearch() {
@@ -5345,7 +5792,7 @@ function addReqItem(cid) {
 function renderReqCart() {
   const el = document.getElementById('req-cart');
   if (myRequest.items.length === 0) {
-    el.innerHTML = '<p class="hint">まだありません。上の検索からサークルを探して「＋品を追加」を押してください</p>';
+    el.innerHTML = '<p class="hint">まだありません。「欲しいものリストから読み込む」か、下の検索からサークルを探して「＋品を追加」を押してください</p>';
     return;
   }
   // サークルごとにグループ化（追加順を保つ）
@@ -5607,14 +6054,20 @@ function makeErrandReport(from) {
   const lines = g.items.map(({ id, item }) => {
     const c = CIRCLES.find(x => x.id === id);
     const cname = c ? c.name : id;
-    const sub = (item.price || 0) * (item.errandQty || 0);
-    if (item.done) {
-      total += sub;
+    const stt = itemState(item);
+    const bq = getBoughtQty(item).errand;
+    const sub = (item.price || 0) * bq;
+    total += sub;
+    if (stt === 'done') {
       return `✅ ${id} ${cname}「${item.text}」×${item.errandQty}${sub ? ` ¥${sub.toLocaleString()}` : ''}`;
+    }
+    if (stt === 'partial') {
+      return `△ ${id} ${cname}「${item.text}」×${bq}／${item.errandQty}（部数不足）${sub ? ` ¥${sub.toLocaleString()}` : ''}`;
     }
     return `❌ ${id} ${cname}「${item.text}」（未購入）`;
   });
-  return `【けもケ お使い報告】${from}さんへ\n` + lines.join('\n') + `\n────\n立て替え合計 ¥${total.toLocaleString()}`;
+  const noPrice = g.items.filter(({ item }) => !(item.price > 0)).length;
+  return `【けもケ お使い報告】${from}さんへ\n` + lines.join('\n') + `\n────\n立て替え合計 ¥${total.toLocaleString()}` + (noPrice ? `（単価未入力 ${noPrice}件は含まず）` : '');
 }
 function copyErrandReport(from) {
   const t = makeErrandReport(from);
@@ -5931,6 +6384,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPinchZoom();
 
   // お使い依頼URLの取り込み（起動時＋起動中にリンクを開いた場合）
+  initErrandGuide();
   checkIncomingRequest();
   window.addEventListener('hashchange', checkIncomingRequest);
 });
