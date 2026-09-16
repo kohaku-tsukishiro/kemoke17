@@ -480,15 +480,20 @@ header h1.app-title {
 
 .memo-panel textarea {
   width: 100%;
-  border: none;
-  background: none;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+  box-sizing: border-box;
+  border: 2px solid var(--warm);
+  border-radius: 10px;
+  padding: 8px;
+  background: white;
+  font-family: inherit;
   font-size: 0.85rem;
   color: var(--text);
   resize: none;
   outline: none;
   min-height: 60px;
 }
+.memo-panel textarea:focus { border-color: var(--orange-light); }
+.memo-panel-label { font-size: 0.72rem; font-weight: 700; color: var(--brown); margin-bottom: 2px; }
 
 .memo-panel .ai-btn {
   display: flex;
@@ -916,6 +921,7 @@ header h1.app-title {
 
 .shop-subtabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   padding: 10px 10px 12px;
   overflow-x: auto;
@@ -923,7 +929,7 @@ header h1.app-title {
 }
 .shop-subtab {
   flex-shrink: 0;
-  padding: 5px 14px;
+  padding: 5px 12px;
   border-radius: 20px;
   border: 1.5px solid var(--brown-light);
   background: white;
@@ -1188,6 +1194,80 @@ header h1.app-title {
   outline: none;
 }
 .cl-price-input input:focus { border-color: var(--orange); }
+/* ===== 欲しいもの：品名の直接編集・単価未入力の可視化 ===== */
+.cl-item-main input[type="checkbox"] { width: 20px; height: 20px; }
+.cl-item-main .cl-from-chip { flex-shrink: 0; }
+.cl-text-input {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--warm);
+  border-radius: 6px;
+  background: white;
+  padding: 4px 6px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: var(--text);
+  outline: none;
+}
+.cl-text-input:focus { border-color: var(--orange); }
+.cl-item.checked .cl-item-main .cl-text-input { color: var(--brown-light); text-decoration: line-through; }
+.cl-item.partial .cl-item-main .cl-text-input { color: #8a5a00; }
+.cl-unpriced-tag {
+  display: none;
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: #B36B00;
+  background: #FFF3DC;
+  border: 1px solid #F0C878;
+  border-radius: 5px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+.unpriced .cl-unpriced-tag { display: inline-block; }
+.cl-item.unpriced:not(.checked) .cl-item-main .cl-text-input { color: #9A5B00; border-color: #F0C878; }
+.cl-item.unpriced .cl-price-input { color: #9A5B00; font-weight: 700; }
+.cl-item.unpriced .cl-price-input input { border-color: #E8A33C; background: #FFF8EC; }
+.cl-price-input input::placeholder { color: #C9A060; font-size: 0.7rem; }
+.shop-memo-checklist label.unpriced:not(.checked) { color: #9A5B00; }
+.cl-price-val:empty { display: none; }
+.shop-mode-note { font-size: 0.78rem; color: var(--brown-light); margin: 0 2px 8px; line-height: 1.6; }
+.unpriced-cleared-note { display: none; font-size: 0.74rem; font-weight: 800; color: var(--green); margin-bottom: 4px; }
+.shop-item.unpriced-cleared { opacity: 0.65; }
+.shop-item.unpriced-cleared .unpriced-cleared-note { display: block; }
+.budget-unpriced {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 10px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 10px;
+  min-height: 36px;
+  border: 1.5px solid #F0C878;
+  border-radius: 8px;
+  background: #FFF6E0;
+  color: #8a5a00;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+.budget-unpriced .bu-sub { font-size: 0.68rem; font-weight: 600; color: #A87420; margin-left: auto; }
+.shop-subtab-count {
+  display: none;
+  margin-left: 4px;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #F0A030;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+}
+.shop-subtab-count.on { display: inline-block; }
 .circle-errand-chip, .circle-self-chip {
   display: inline-block;
   font-size: 0.68rem;
@@ -2900,12 +2980,13 @@ header h1 .unofficial-tag {
   <div class="errand-ask-bar" id="errand-ask-bar"></div>
   <!-- サブタブ -->
   <div class="shop-subtabs" id="shop-subtabs">
-    <button class="shop-subtab active" onclick="setShopFilter('all')">全部</button>
-    <button class="shop-subtab" onclick="setShopFilter('plan')">行く予定<span class="icon ic-plan"></span></button>
-    <button class="shop-subtab" onclick="setShopFilter('done')">済み<span class="icon ic-done"></span></button>
-    <button class="shop-subtab" onclick="setShopFilter('missed')">買えなかった</button>
-    <button class="shop-subtab" onclick="setShopFilter('later')">あとで<span class="icon ic-later"></span></button>
-    <button class="shop-subtab" onclick="setShopFilter('errand')">お使い<span class="icon ic-errand"></span></button>
+    <button class="shop-subtab active" data-filter="all" onclick="setShopFilter('all')">全部</button>
+    <button class="shop-subtab" data-filter="plan" onclick="setShopFilter('plan')">行く予定<span class="icon ic-plan"></span></button>
+    <button class="shop-subtab" data-filter="done" onclick="setShopFilter('done')">済み<span class="icon ic-done"></span></button>
+    <button class="shop-subtab" data-filter="missed" onclick="setShopFilter('missed')">買えなかった</button>
+    <button class="shop-subtab" data-filter="later" onclick="setShopFilter('later')">あとで<span class="icon ic-later"></span></button>
+    <button class="shop-subtab" data-filter="errand" onclick="setShopFilter('errand')">お使い<span class="icon ic-errand"></span></button>
+    <button class="shop-subtab" data-filter="unpriced" onclick="setShopFilter('unpriced')">単価未入力<span class="shop-subtab-count" id="subtab-unpriced-count"></span></button>
   </div>
   <div class="shopping-list" id="shopping-list"></div>
 </div>
@@ -3917,11 +3998,11 @@ function circleCardHTML(c) {
 
   return `<div class="shop-item ${stClass}" id="card-${id}">
     <div class="shop-item-inner">
+      <div class="unpriced-cleared-note">✓ このサークルの単価はすべて入力できました</div>
       <div class="shop-item-header">
         <div>
           ${st ? `<span class="status-badge ${badgeClass}">${badgeText}</span>` : ''}
-          ${circleTotals.errand ? `<span class="circle-errand-chip"><span class="icon ic-errand"></span> ${moneyPair(circleTotals.boughtErrand, circleTotals.errand)}</span>` : ''}
-          ${circleTotals.self ? `<span class="circle-self-chip"><span class="icon ic-self"></span> ${moneyPair(circleTotals.boughtSelf, circleTotals.self)}</span>` : ''}
+          <span class="circle-chips">${circleChipsHTML(circleTotals)}</span>
           <div class="name">${c.name}</div>
           <div style="font-size:0.75rem;color:var(--brown-light)">${id} ／ ${c.rep}</div>
           ${links ? `<div class="circle-links" style="margin-top:3px">${links}</div>` : ''}
@@ -3935,9 +4016,9 @@ function circleCardHTML(c) {
       ${(!isOpen && memo) ? `<div class="shop-memo">${escapeHTML(memo)}</div>` : ''}
       ${(!isOpen && hasCL) ? clHTML : ''}
       ${isOpen ? `<div class="memo-panel open" id="memo-${id}">
-        <textarea placeholder="頒布物・メモを入力..." oninput="saveMemo('${id}', this.value)">${escapeHTML(memo)}</textarea>
+        <div class="memo-panel-label"><span class="icon ic-memo"></span> メモ</div>
+        <textarea placeholder="メモを入力..." oninput="saveMemo('${id}', this.value)">${escapeHTML(memo)}</textarea>
         ${clHTML}
-
       </div>` : ''}
       <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
         <button class="shop-jump-btn" onclick="toggleMemo('${id}')" style="background:${(hasMemo||hasCL)?'var(--green)':'var(--brown)'}">${isOpen ? '<span class="icon ic-memo"></span> 閉じる' : '<span class="icon ic-memo"></span> メモ・欲しいもの'}</button>
@@ -3947,6 +4028,14 @@ function circleCardHTML(c) {
   </div>`;
 }
 
+
+// サークルカード上部の金額チップ（お使い用／自分用の「買えた額／予定額」）
+function circleChipsHTML(t) {
+  return [
+    t.errand ? `<span class="circle-errand-chip"><span class="icon ic-errand"></span> ${moneyPair(t.boughtErrand, t.errand)}</span>` : '',
+    t.self ? `<span class="circle-self-chip"><span class="icon ic-self"></span> ${moneyPair(t.boughtSelf, t.self)}</span>` : ''
+  ].filter(Boolean).join(' ');
+}
 
 function toggleMemo(id) {
   openMemos[id] = !openMemos[id];
@@ -4565,7 +4654,7 @@ function showCellDetail(id) {
       <button onclick="toggleCheck('${id}');showCellDetail('${id}')" class="btn-bought${isDone?' active':''}" style="flex:1 1 90px;min-width:0"><span class="icon ic-done"></span> 済み</button>
     </div>
     <div style="font-size:0.8rem;font-weight:700;margin-bottom:4px;color:var(--brown)"><span class="icon ic-memo"></span> メモ</div>
-    <textarea id="panel-memo-${id}" placeholder="メモ..." style="width:100%;border:2px solid var(--warm);border-radius:10px;padding:8px;font-family:inherit;font-size:0.85rem;min-height:70px;outline:none;resize:none" oninput="saveMemo('${id}',this.value)">${escapeHTML(memo)}</textarea>
+    <textarea id="panel-memo-${id}" placeholder="メモを入力..." style="width:100%;border:2px solid var(--warm);border-radius:10px;padding:8px;font-family:inherit;font-size:0.85rem;min-height:70px;outline:none;resize:none" oninput="saveMemo('${id}',this.value)">${escapeHTML(memo)}</textarea>
     ${checklistHTML(id, true)}
     <div style="margin-top:10px;display:flex;gap:8px">
       <button onclick="jumpToSearchFromMap('${id}')" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--warm);color:var(--brown);font-weight:700;cursor:pointer;font-family:inherit;font-size:0.82rem"><span class="icon ic-search"></span> 検索で見る</button>
@@ -4709,7 +4798,112 @@ function setChecklistItemPrice(id, idx, val) {
   checklists[id][idx].price = parseInt(val) || 0;
   saveChecklists();
   renderPurchaseTotals();
-  refreshCircleUI(id);
+  // 連続入力中に入力欄を作り直さないよう、表示中の該当行だけ書き換え、全体の再描画は入力が終わってから行う
+  patchChecklistItemUI(id, idx);
+  scheduleCircleRefresh(id);
+}
+
+// 品名の修正：登録済みの欲しいものをその場で書き換える（単価・数量・チェック状態はそのまま）
+function setChecklistItemText(id, idx, input) {
+  if (!checklists[id] || !checklists[id][idx]) return;
+  const item = checklists[id][idx];
+  const v = String(input && input.value != null ? input.value : '').trim().slice(0, REQ_LIMITS.text);
+  if (!v) {
+    // 空で確定したときは元の名前に戻す（削除は✕ボタンからのみ）
+    if (input) input.value = item.text;
+    return;
+  }
+  if (v === item.text) return;
+  item.text = v;
+  saveChecklists();
+  patchChecklistItemUI(id, idx);
+  scheduleCircleRefresh(id);
+}
+
+// 単価欄で Enter／「次へ」：同じ一覧内の次の「単価未入力」欄へ移動する（無ければ確定してキーボードを閉じる）
+function onPriceInputKeydown(e, input) {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const root = input.closest('#shopping-list, #route-list, #route-later-list, #route-done-list, #panel-body, #circles-list') || document;
+  const inputs = [...root.querySelectorAll('.cl-item.unpriced .cl-price-input input')].filter(el => el !== input && el.offsetParent !== null);
+  const next = inputs.find(el => input.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+  if (next) next.focus(); else input.blur();
+}
+
+// 単価未入力＝price が 0 以下（未設定）。件数は品物の行数で数える（数量ではない）
+function isUnpricedItem(item) { return !(item.price > 0); }
+function getUnpricedStats() {
+  let items = 0, circles = 0;
+  Object.keys(checklists).forEach(id => {
+    const n = (checklists[id] || []).filter(isUnpricedItem).length;
+    if (n) { items += n; circles++; }
+  });
+  return { items, circles };
+}
+function unpricedHeadText() {
+  const st = getUnpricedStats();
+  return `${st.circles} サークルに単価未入力の品が ${st.items} 件あります。単価を入れると予算・お使い精算の金額に反映されます。`;
+}
+// サブタブ「単価未入力」の件数バッジ
+function updateUnpricedIndicators() {
+  const n = getUnpricedStats().items;
+  const badge = document.getElementById('subtab-unpriced-count');
+  if (badge) { badge.textContent = n; badge.classList.toggle('on', n > 0); }
+}
+
+// 表示中の欲しいもの1行を、再描画せずにデータへ合わせる（品名・単価・単価未入力の警告・サークルの金額チップ・一覧の見出し）
+function patchChecklistItemUI(id, idx) {
+  const item = checklists[id] && checklists[id][idx];
+  if (!item) return;
+  const price = item.price || 0;
+  const unpriced = isUnpricedItem(item);
+  const focused = document.activeElement;
+  document.querySelectorAll(`[data-cl="${id}:${idx}"]`).forEach(row => {
+    row.classList.toggle('unpriced', unpriced);
+    const label = row.querySelector('label');
+    if (label) label.classList.toggle('unpriced', unpriced);
+    row.querySelectorAll('[data-cl-text]').forEach(el => { el.textContent = item.text; });
+    row.querySelectorAll('.cl-price-val').forEach(el => { el.textContent = price ? '¥' + price.toLocaleString() : ''; });
+    row.querySelectorAll('.cl-text-input').forEach(el => { if (el !== focused) el.value = item.text; });
+    row.querySelectorAll('.cl-price-input input').forEach(el => { if (el !== focused) el.value = price || ''; });
+  });
+  const t = getCircleTotals(id);
+  document.querySelectorAll(`[id="card-${id}"] .circle-chips`).forEach(el => { el.innerHTML = circleChipsHTML(t); });
+  updateShopHeaders(id);
+}
+// 買い物リストの見出し部分（単価未入力タブ／お使いタブ）を行内更新に合わせて更新する
+function updateShopHeaders(id) {
+  const listEl = document.getElementById('shopping-list');
+  if (!listEl) return;
+  if (shopFilter === 'unpriced') {
+    const head = document.getElementById('shop-unpriced-head');
+    if (head) head.textContent = unpricedHeadText();
+    // このサークルの未入力が0件になったら「完了」表示にする（一覧からは入力が終わった後の再描画で外れる）
+    const cleared = !(checklists[id] || []).some(isUnpricedItem);
+    listEl.querySelectorAll(`[id="card-${id}"]`).forEach(card => card.classList.toggle('unpriced-cleared', cleared));
+  } else if (shopFilter === 'errand') {
+    const head = document.getElementById('shop-errand-head');
+    if (head) head.innerHTML = errandTabHeadHTML();
+  }
+}
+
+// 入力欄にフォーカスがある間は全体の再描画を待ち、入力が終わってからまとめて反映する
+const pendingRefreshIds = new Set();
+let refreshTimer = null;
+function isTextFieldFocused() {
+  const a = document.activeElement;
+  return !!a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && !['checkbox', 'radio', 'button', 'submit'].includes(a.type)));
+}
+function scheduleCircleRefresh(id) {
+  pendingRefreshIds.add(id);
+  clearTimeout(refreshTimer);
+  const tick = () => {
+    if (isTextFieldFocused()) { refreshTimer = setTimeout(tick, 1000); return; }
+    const ids = [...pendingRefreshIds];
+    pendingRefreshIds.clear();
+    refreshCirclesUI(ids);
+  };
+  refreshTimer = setTimeout(tick, 600);
 }
 
 function adjustChecklistQty(id, idx, field, delta) {
@@ -4799,21 +4993,29 @@ function errandFromLabel(item) {
 }
 
 // カード／買い物リスト／マップ詳細パネルの該当箇所をまとめて再描画
-function refreshCircleUI(id) {
+function refreshCircleUI(id) { refreshCirclesUI([id]); }
+function refreshCirclesUI(ids) {
   // フォーカス中の要素が置き換え対象に含まれると outerHTML 置換時にエラーになるため先にblur
   if (document.activeElement) document.activeElement.blur();
-  const c = CIRCLES.find(x => x.id === id);
-  if (c) {
-    document.querySelectorAll(`[id="card-${id}"]`).forEach(card => {
-      card.outerHTML = circleCardHTML(c);
-    });
-  }
+  ids.forEach(id => {
+    const c = CIRCLES.find(x => x.id === id);
+    if (c) {
+      document.querySelectorAll(`[id="card-${id}"]`).forEach(card => {
+        card.outerHTML = circleCardHTML(c);
+      });
+    }
+  });
   const shoppingTab = document.getElementById('tab-shopping');
   if (shoppingTab && shoppingTab.classList.contains('active')) renderShopping();
   const routeTab = document.getElementById('tab-route');
   if (routeTab && routeTab.classList.contains('active')) renderRoute();
   const panel = document.getElementById('map-detail-panel');
-  if (panel && panel.style.display === 'block') showCellDetail(id);
+  if (panel && panel.style.display === 'block') {
+    // パネルに表示中のサークルが対象のときだけ描き直す
+    const ta = panel.querySelector('textarea[id^="panel-memo-"]');
+    const shown = ta ? ta.id.slice('panel-memo-'.length) : ids[ids.length - 1];
+    if (ids.includes(shown)) showCellDetail(shown);
+  }
 }
 
 // サークルごとの金額。self/errand は予定額（数量×単価）、boughtSelf/boughtErrand は買えた分の額
@@ -4879,7 +5081,7 @@ function renderPurchaseTotals() {
   const el = document.getElementById('purchase-totals-bar');
   if (!el) return;
   const t = getPurchaseTotals();
-  if (t.total === 0) { el.innerHTML = ''; return; }
+  if (t.total === 0) { el.innerHTML = ''; renderBudgetBar(); return; }
   const fromGroups = getErrandsByFrom();
   const fromNames = Object.keys(fromGroups);
   let fromHTML = '';
@@ -4902,9 +5104,12 @@ function checklistHTML(id, editable) {
   const items = checklists[id] || [];
   if (items.length === 0 && !editable) return '';
   let html = '<div class="' + (editable ? 'memo-checklist-area' : 'shop-memo-checklist') + '">';
-  html += '<div style="font-size:0.72rem;font-weight:700;color:var(--brown);margin-bottom:2px"><span class="icon ic-list"></span> 欲しいものリスト</div>';
+  html += '<div style="font-size:0.72rem;font-weight:700;color:var(--brown);margin-bottom:2px"><span class="icon ic-list"></span> 欲しいものリスト' + (editable ? '<span style="font-weight:600;color:var(--brown-light)">（欲しい頒布物はここに登録）</span>' : '') + '</div>';
   items.forEach((item, idx) => {
     const price = item.price || 0;
+    const unpriced = isUnpricedItem(item);
+    const unpricedTag = '<span class="cl-unpriced-tag">単価未入力</span>';
+    const clKey = `${id}:${idx}`;
     const selfQty = item.selfQty || 0;
     const errandQty = item.errandQty || 0;
     const stt = itemState(item);
@@ -4941,18 +5146,18 @@ function checklistHTML(id, editable) {
       const partBtn = (!item.done && (selfQty || errandQty))
         ? `<button type="button" class="cl-part-btn${item.partial ? ' active' : ''}" onclick="toggleChecklistPartial('${id}',${idx})">${item.partial ? '一部買えた ✓' : '一部買えた'}</button>`
         : '';
-      html += `<div class="cl-row">
-        <label class="${stClass}">
+      html += `<div class="cl-row${unpriced ? ' unpriced' : ''}" data-cl="${clKey}">
+        <label class="${stClass}${unpriced ? ' unpriced' : ''}">
           <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
-          <span style="flex:1">${partMark}${escapeHTML(item.text)}${price ? ` <b>¥${price.toLocaleString()}</b>` : ''}${badge}${fromChip}</span>
+          <span style="flex:1">${partMark}<span data-cl-text>${escapeHTML(item.text)}</span> <b class="cl-price-val">${price ? `¥${price.toLocaleString()}` : ''}</b> ${unpricedTag}${badge}${fromChip}</span>
         </label>${partBtn}
       </div>${boughtRow}`;
       return;
     }
-    html += `<div class="cl-item ${stClass}">
+    html += `<div class="cl-item ${stClass}${unpriced ? ' unpriced' : ''}" data-cl="${clKey}">
       <div class="cl-item-main">
         <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${id}',${idx})">
-        <span class="cl-text" onclick="toggleChecklistItem('${id}',${idx})">${partMark}${escapeHTML(item.text)}${fromChip}</span>
+        ${partMark}<input type="text" class="cl-text-input" value="${escapeHTML(item.text)}" maxlength="${REQ_LIMITS.text}" placeholder="品名" aria-label="品名（タップで修正できます）" enterkeyhint="done" onchange="setChecklistItemText('${id}',${idx},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">${fromChip}
         <span class="cl-remove" role="button" aria-label="この品物を削除" onclick="removeChecklistItem('${id}',${idx})">✕</span>
       </div>
       <div class="cl-item-sub">
@@ -4968,7 +5173,7 @@ function checklistHTML(id, editable) {
           <span class="cl-qty-num">${errandQty}</span>
           <button type="button" class="cl-qty-btn" onclick="adjustChecklistQty('${id}',${idx},'errand',1)">＋</button>
         </span>
-        <span class="cl-price-input">単価¥<input type="number" value="${price||''}" placeholder="0" min="0" step="10" onchange="setChecklistItemPrice('${id}',${idx},this.value)"></span>
+        <span class="cl-price-input">単価¥<input type="number" inputmode="numeric" value="${price||''}" placeholder="未入力" min="0" step="10" enterkeyhint="next" aria-label="単価" onchange="setChecklistItemPrice('${id}',${idx},this.value)" onkeydown="onPriceInputKeydown(event,this)">${unpricedTag}</span>
         ${errandQty ? `<span class="cl-from-input"><span class="icon ic-errand"></span><input type="text" placeholder="誰に頼まれた？" maxlength="50" value="${escapeHTML(item.from || '')}" onchange="setChecklistItemFrom('${id}',${idx},this.value)"></span>` : ''}
         ${!item.done ? `<button type="button" class="cl-part-btn${item.partial ? ' active' : ''}" onclick="toggleChecklistPartial('${id}',${idx})">${item.partial ? '一部買えた ✓' : '一部買えた'}</button>` : ''}
       </div>
@@ -4977,7 +5182,7 @@ function checklistHTML(id, editable) {
   });
   if (editable) {
     html += `<div class="add-checklist-row">
-      <input type="text" id="cl-input-${id}" placeholder="追加..." enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();addChecklistItem('${id}');}">
+      <input type="text" id="cl-input-${id}" placeholder="欲しい頒布物を追加..." enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();addChecklistItem('${id}');}">
       <button onclick="addChecklistItem('${id}')">+</button>
     </div>`;
   }
@@ -5018,13 +5223,19 @@ function bulkClearBlock(block) {
 // 買うものリスト
 // =====================
 let shopFilter = 'all';
-function setShopFilter(f) {
+function setShopFilter(f, scrollToList) {
   shopFilter = f;
-  document.querySelectorAll('.shop-subtab').forEach(b => b.classList.remove('active'));
-  const idx = ['all','plan','done','missed','later','errand'].indexOf(f);
-  const tabs = document.querySelectorAll('.shop-subtab');
-  if (tabs[idx]) tabs[idx].classList.add('active');
+  document.querySelectorAll('.shop-subtab').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
   renderShopping();
+  if (scrollToList) {
+    // 予算管理の「単価未入力」から来たとき：サブタブが固定タブバーの下に見える位置までスクロール
+    const subtabs = document.getElementById('shop-subtabs');
+    const bar = document.querySelector('.tabs');
+    if (subtabs) {
+      const top = subtabs.getBoundingClientRect().top + window.scrollY - (bar ? bar.offsetHeight : 0) - 4;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+  }
 }
 
 // 買い物リスト上部の「お使いを依頼する」バー。頼まれた品を持っている人（会場に行く側）には1行に縮める
@@ -5042,6 +5253,50 @@ function renderAskBar() {
   }
 }
 
+// お使いタブの見出し：依頼リンク貼り付け欄＋依頼者ごとのサマリー（単価入力の行内更新でも差し替えられるよう関数化）
+function errandTabHeadHTML() {
+  let html = '';
+  html += errandPasteBoxHTML();
+  const fromGroups = getErrandsByFrom();
+  html += Object.keys(fromGroups).sort((a, b) => a.localeCompare(b, 'ja')).map(n => {
+    const g = fromGroups[n];
+    const enc = encodeURIComponent(n).replace(/'/g, '%27');
+    const open = errandCardOpen[n] !== false;
+    const rows = g.items.map(({ id, item }) => {
+      const c = CIRCLES.find(x => x.id === id);
+      const stt = itemState(item);
+      const bq = getBoughtQty(item).errand;
+      const mark = stt === 'done' ? '✅' : stt === 'partial' ? '△' : '❌';
+      const qty = stt === 'partial' ? `${bq}／${item.errandQty} 部数不足` : stt === 'none' ? `×${item.errandQty} 未購入` : `×${item.errandQty}`;
+      const money = (item.price || 0) * bq;
+      return `<div class="ef-item st-${stt}" onclick="jumpToShopCard('${id}')">
+        <span class="ef-mark">${mark}</span>
+        <span class="ef-cid">${id}</span>
+        <span class="ef-text">${c ? escapeHTML(c.name) : ''}「${escapeHTML(item.text)}」</span>
+        <span class="ef-qty">${qty}</span>
+        <span class="ef-money">${money ? '¥' + money.toLocaleString() : ''}</span>
+      </div>`;
+    }).join('');
+    return `<div class="errand-from-card">
+      <div class="ef-head" onclick="toggleErrandCard(decodeURIComponent('${enc}'))"><span class="icon ic-errand"></span> ${escapeHTML(n)}${n === '（名前なし）' ? '' : 'さん'}の依頼
+        <span class="ef-stats"><span class="ef-caret">${open ? '▲' : '▼'}</span></span></div>
+      <div class="ef-sum">
+        <span class="s-done">✅ 買えた ${g.doneCount}</span>
+        <span class="s-partial">△ 一部 ${g.partialCount}</span>
+        <span class="s-none">❌ 未 ${g.noneCount}</span>
+        <span class="s-money">立て替え ¥${g.bought.toLocaleString()}${g.total !== g.bought ? ` ／ 予定 ¥${g.total.toLocaleString()}` : ''}</span>
+      </div>
+      ${g.noPrice ? `<div class="ef-noprice">単価が未入力の品が ${g.noPrice}件あります。金額はその分を除いた合計です</div>` : ''}
+      ${open ? `<div class="ef-items">${rows}</div>
+      <div class="ef-btns">
+        <button class="errand-sub-btn" onclick="copyErrandReport(decodeURIComponent('${enc}'))">報告をコピー</button>
+        <button class="errand-sub-btn" onclick="shareErrandReport(decodeURIComponent('${enc}'))">共有</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+  return html;
+}
+
 function renderShopping() {
   renderAskBar();
   const blockColors = {A:'#FF7A35',B:'#FF6B9D',C:'#4CAF7D',D:'#667eea',E:'#FFB300',F:'#00BCD4',G:'#9C27B0',H:'#FF5722',I:'#795548',J:'#607D8B',K:'#E91E63',L:'#8BC34A',M:'#FF9800',N:'#00897B',O:'#3949AB',P:'#8D6E63',Q:'#EC407A',R:'#7CB342',S:'#5D4037'};
@@ -5054,6 +5309,8 @@ function renderShopping() {
     if (shopFilter === 'missed') return st === 'done' && (checklists[c.id] || []).some(item => !item.done);
     if (shopFilter === 'later') return st === 'later';
     if (shopFilter === 'errand') return (checklists[c.id] || []).some(item => item.errandQty > 0);
+    // 単価未入力：単価が入っていない欲しいものが1件以上あるサークル（行く予定などの状態は問わない）
+    if (shopFilter === 'unpriced') return (checklists[c.id] || []).some(isUnpricedItem);
     return false;
   });
 
@@ -5082,6 +5339,12 @@ function renderShopping() {
       </div>`;
       return;
     }
+    if (shopFilter === 'unpriced') {
+      el.innerHTML = `<div class="empty-state"><div class="emoji"><span class="icon ic-done"></span></div>
+        <p>単価未入力の商品はありません</p>
+        <p style="font-size:0.75rem;color:var(--brown-light);margin:8px 0 0;line-height:1.7">欲しいものの単価はすべて入力済みです。予算・お使い精算の金額に全品が反映されています</p></div>`;
+      return;
+    }
     if (shopFilter === 'missed') {
       el.innerHTML = `<div class="empty-state"><div class="emoji"><span class="icon ic-done"></span></div>
         <p>買えなかったものはありません</p>
@@ -5104,44 +5367,7 @@ function renderShopping() {
   // お使いタブ：依頼者ごとのサマリー＋報告ボタン
   let errandHeaderHTML = '';
   if (shopFilter === 'errand') {
-    errandHeaderHTML += errandPasteBoxHTML();
-    const fromGroups = getErrandsByFrom();
-    errandHeaderHTML += Object.keys(fromGroups).sort((a, b) => a.localeCompare(b, 'ja')).map(n => {
-      const g = fromGroups[n];
-      const enc = encodeURIComponent(n).replace(/'/g, '%27');
-      const open = errandCardOpen[n] !== false;
-      const rows = g.items.map(({ id, item }) => {
-        const c = CIRCLES.find(x => x.id === id);
-        const stt = itemState(item);
-        const bq = getBoughtQty(item).errand;
-        const mark = stt === 'done' ? '✅' : stt === 'partial' ? '△' : '❌';
-        const qty = stt === 'partial' ? `${bq}／${item.errandQty} 部数不足` : stt === 'none' ? `×${item.errandQty} 未購入` : `×${item.errandQty}`;
-        const money = (item.price || 0) * bq;
-        return `<div class="ef-item st-${stt}" onclick="jumpToShopCard('${id}')">
-          <span class="ef-mark">${mark}</span>
-          <span class="ef-cid">${id}</span>
-          <span class="ef-text">${c ? escapeHTML(c.name) : ''}「${escapeHTML(item.text)}」</span>
-          <span class="ef-qty">${qty}</span>
-          <span class="ef-money">${money ? '¥' + money.toLocaleString() : ''}</span>
-        </div>`;
-      }).join('');
-      return `<div class="errand-from-card">
-        <div class="ef-head" onclick="toggleErrandCard(decodeURIComponent('${enc}'))"><span class="icon ic-errand"></span> ${escapeHTML(n)}${n === '（名前なし）' ? '' : 'さん'}の依頼
-          <span class="ef-stats"><span class="ef-caret">${open ? '▲' : '▼'}</span></span></div>
-        <div class="ef-sum">
-          <span class="s-done">✅ 買えた ${g.doneCount}</span>
-          <span class="s-partial">△ 一部 ${g.partialCount}</span>
-          <span class="s-none">❌ 未 ${g.noneCount}</span>
-          <span class="s-money">立て替え ¥${g.bought.toLocaleString()}${g.total !== g.bought ? ` ／ 予定 ¥${g.total.toLocaleString()}` : ''}</span>
-        </div>
-        ${g.noPrice ? `<div class="ef-noprice">単価が未入力の品が ${g.noPrice}件あります。金額はその分を除いた合計です</div>` : ''}
-        ${open ? `<div class="ef-items">${rows}</div>
-        <div class="ef-btns">
-          <button class="errand-sub-btn" onclick="copyErrandReport(decodeURIComponent('${enc}'))">報告をコピー</button>
-          <button class="errand-sub-btn" onclick="shareErrandReport(decodeURIComponent('${enc}'))">共有</button>
-        </div>` : ''}
-      </div>`;
-    }).join('');
+    errandHeaderHTML = `<div id="shop-errand-head">${errandTabHeadHTML()}</div>`;
   }
 
   // ブロックごとにグループ化
@@ -5164,7 +5390,14 @@ function renderShopping() {
     groups[block].sort((a, b) => parseInt(a.id.split('-')[1]) - parseInt(b.id.split('-')[1]));
   });
 
-  let html = errandHeaderHTML + missedHeaderHTML;
+  // 単価未入力タブ：件数の見出しを出し、各サークルの欲しいものリストを開いた状態で表示する（単価欄がすぐ触れるように）
+  let unpricedHeaderHTML = '';
+  if (shopFilter === 'unpriced') {
+    list.forEach(c => { openMemos[c.id] = true; });
+    unpricedHeaderHTML = `<div id="shop-unpriced-head" class="shop-mode-note">${escapeHTML(unpricedHeadText())}</div>`;
+  }
+
+  let html = errandHeaderHTML + missedHeaderHTML + unpricedHeaderHTML;
   if (blockRoute) {
     html += `<div style="text-align:right;margin-bottom:6px"><button class="bulk-btn" onclick="resetBlockRoute()" style="font-size:0.7rem;padding:4px 10px">↺ ルート順リセット</button></div>`;
   }
@@ -5221,6 +5454,7 @@ function renderBudgetBar() {
   const over = budget > 0 && total > budget;
   const planOver = budget > 0 && planned > budget;
   const remain = budget > 0 ? budget - total : 0;
+  const unpricedN = getUnpricedStats().items;   // 単価未入力の品数（行数）
 
   el.innerHTML = `
     <div class="budget-header">
@@ -5243,7 +5477,9 @@ function renderBudgetBar() {
         <span style="${over?'color:#e74c3c;font-weight:800':''}">残り: ¥${remain.toLocaleString()}</span>
       </div>
     ` : `<div style="font-size:0.78rem;color:var(--brown-light)"><span class="icon ic-settings"></span> 設定から予算額を入力してください</div>`}
+    ${unpricedN > 0 ? `<button type="button" class="budget-unpriced" onclick="setShopFilter('unpriced', true)" aria-label="単価未入力の品を一覧で見る"><span class="bu-main">⚠ 単価未入力：${unpricedN}件</span><span class="bu-sub">未入力分は合計に含まれていません ›</span></button>` : ''}
   `;
+  updateUnpricedIndicators();
 }
 
 // =====================
@@ -5427,7 +5663,8 @@ function renderRouteLater() {
       </div>
       ${isExpanded ? `<div style="padding:0 12px 10px 12px">
         <div class="memo-panel open" id="route-later-memo-${id}" style="display:block">
-          <textarea placeholder="頒布物・メモを入力..." oninput="saveMemo('${id}', this.value)" style="width:100%;border:2px solid var(--warm);border-radius:10px;padding:8px;font-family:inherit;font-size:0.85rem;min-height:60px;outline:none;resize:none">${escapeHTML(memo)}</textarea>
+          <div class="memo-panel-label"><span class="icon ic-memo"></span> メモ</div>
+          <textarea placeholder="メモを入力..." oninput="saveMemo('${id}', this.value)">${escapeHTML(memo)}</textarea>
           ${checklistHTML(id, true)}
         </div>
         <button class="shop-jump-btn" onclick="jumpToMapCell('${id}')" style="margin-top:6px"><span class="icon ic-map"></span> 配置図で見る</button>
@@ -5478,7 +5715,8 @@ function renderRouteDone() {
       </div>
       ${isExpanded ? `<div style="padding:0 12px 10px 12px">
         <div class="memo-panel open" id="route-done-memo-${id}" style="display:block">
-          <textarea placeholder="頒布物・メモを入力..." oninput="saveMemo('${id}', this.value)" style="width:100%;border:2px solid var(--warm);border-radius:10px;padding:8px;font-family:inherit;font-size:0.85rem;min-height:60px;outline:none;resize:none">${escapeHTML(memo)}</textarea>
+          <div class="memo-panel-label"><span class="icon ic-memo"></span> メモ</div>
+          <textarea placeholder="メモを入力..." oninput="saveMemo('${id}', this.value)">${escapeHTML(memo)}</textarea>
           ${checklistHTML(id, true)}
         </div>
         <button class="shop-jump-btn" onclick="jumpToMapCell('${id}')" style="margin-top:6px"><span class="icon ic-map"></span> 配置図で見る</button>
@@ -5541,7 +5779,8 @@ function renderRoute() {
       </div>
       ${isExpanded ? `<div style="padding:0 12px 10px 12px">
         <div class="memo-panel open" id="route-memo-${id}" style="display:block">
-          <textarea placeholder="頒布物・メモを入力..." oninput="saveMemo('${id}', this.value)" style="width:100%;border:2px solid var(--warm);border-radius:10px;padding:8px;font-family:inherit;font-size:0.85rem;min-height:60px;outline:none;resize:none">${escapeHTML(memo)}</textarea>
+          <div class="memo-panel-label"><span class="icon ic-memo"></span> メモ</div>
+          <textarea placeholder="メモを入力..." oninput="saveMemo('${id}', this.value)">${escapeHTML(memo)}</textarea>
           ${checklistHTML(id, true)}
         </div>
         <button class="shop-jump-btn" onclick="jumpToMapCell('${id}')" style="margin-top:6px"><span class="icon ic-map"></span> 配置図で見る</button>
